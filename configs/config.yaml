@@ -1,0 +1,7 @@
+data:
+  path: data.csv
+  target: target
+
+model:
+  name: random_forest
+  n_estimators: 100
