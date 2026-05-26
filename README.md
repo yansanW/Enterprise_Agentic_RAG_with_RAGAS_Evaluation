@@ -1,6 +1,32 @@
 # Enterprise-Agentic-RAG-with-RAGAS-Evaluation
 
-# Project Structure
+## Key Architectural Features & Engineering Demonstrations
+---
+This project demonstrates a production-ready, headless **Enterprise Multimodal RAG Engine** optimized for layout-dense documents (research papers, financial tables, media feeds).
+
+### 1. Spatial Ingestion Engine: 
+(`src/ingestion/`)
+* Replaced naive left-to-right text extraction with layout-aware parsing via PyMuPDF (`fitz`). 
+* Structurally isolates tables and visual grids, tagging assets with metadata matrices (`{"type": "table"}`) to preserve contextual geometric layouts.
+
+### 2. Cross-Modal Data Tracks:
+* Processes multimedia links dynamically. 
+* Downloads and transcribes video streams locally using **OpenAI Whisper** with microsecond time-offset indexing.
+
+### 3. Deterministic Guardrails:
+(`src/pipeline/`)
+* Implements **Pydantic** schema validation forced directly onto LLM decoding layers, guaranteeing strict JSON responses and automated fallback handling if context boundaries are leaked.
+
+### 4. Rigorous MLOps Validation:
+(`src/eval/`)
+* Utilizes an automated **RAGAS Evaluation pipeline** against a curated offline Golden Dataset to analytically optimize *Context Precision* and *Faithfulness*.
+
+### 5. Sovereign Cloud Deployment:
+*  Implements a strict **Factory & Strategy Design Pattern** to seamlessly switch backends between cloud endpoints (Gemini API) and fully local tensor execution (Ollama) via `config.yaml`. 
+* Delivered as a headless, containerized **FastAPI** application with **Docker Compose**.
+
+
+## Project Structure
 ---
 
 ```
@@ -42,36 +68,24 @@ Enterprise_Agentic_RAG_with_RAGAS_Evaluation/
 │   └── golden_dataset.json    # Your offline evaluation Q&A pairs
 │
 ├── README.md
-├── .env.example                  # Template for secrets (API keys)
+├── .env.example               # Template for secrets (API keys)
 ├── Dockerfile                 # For containerisation
 ├── docker-compose.yml         # Orchstrates app + local database
 └── requirements.txt
 ```
----
 
 ### src/
 Core source code.
 
-- **data/**: Data loading and preprocessing
-- **models/**: Model definitions
-- **training/**: Training logic
-- **evaluation/**: Metrics and validation
+- **ingestion/**: handles the input data boundaries (PDFs, Videos, etc.).
+- **pipeline/**: handles the cognitive core (Chains, Agents, Prompts, Rerankers).
+- **api/**: handles the application delivery layer (FastAPI).
 - **utils/**: Helper functions
 
-### configs/
-Configuration files (YAML). Avoid hardcoding parameters in code.
 
-### notebooks/
-Exploration only. Do NOT put production logic here.
-
-### main.py
-Entry point of the pipeline.
-
+## Installation
 ---
-
-## Philosophy
-
-- Keep components modular
-- Avoid hardcoding (use config)
-- Separate responsibilities
-- Make everything reusable
+```
+pip install -r requirements.txt
+```
+---
