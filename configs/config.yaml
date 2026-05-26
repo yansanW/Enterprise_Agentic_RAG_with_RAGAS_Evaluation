@@ -1,7 +1,32 @@
-data:
-  path: data.csv
-  target: target
+# configs/config.yaml
+# This is a YAML configuration file for a RAG (Retrieval-Augmented Generation) system. 
+# It defines parameters for three main components: ingestion, retrieval, and generation.
+provider:
+  llm_source: "ollama"        # Options: "google" or "ollama"
+  embedding_source: "ollama"  # Options: "google" or "ollama"
 
-model:
-  name: random_forest
-  n_estimators: 100
+models:
+  google_llm: "gemini-2.5-flash"
+  google_embedding: "models/gemini-embedding-001"
+  ollama_llm: "llama3"
+  ollama_embedding: "nomic-embed-text" # Standard local embedding model
+
+ingestion:
+  parser_strategy: "multimodal_vlm" # Options: "standard_text", "multimodal_vlm"
+  splitter_type: "semantic" 
+  chunk_size: 500     # Used if static splitter is selected
+  chunk_overlap: 50   # Used if static splitter is selected
+  # Options: "static", "recursive" or "semantic". "semantic" uses a more advanced method to split text based on meaning, while "recursive" splits text based on fixed rules (e.g., by paragraphs or sentences).
+  # for Dynamic & Semantic Chunking Strategies
+  breakpoint_threshold_type: "percentile"  # CORRECT: Options: "percentile" or "absolute". Determines how the breakpoint threshold is calculated for semantic chunking.
+  breakpoint_threshold_amount: 95  # CORRECT: Controls chunk size when using "percentile" type
+
+
+retrieval:
+  base_k: 10
+  rerank_top_n: 3
+  rerank_model: "rerank-v3.5"
+
+generation:
+  model_name: "gemini-2.5-flash"
+  temperature: 0.2

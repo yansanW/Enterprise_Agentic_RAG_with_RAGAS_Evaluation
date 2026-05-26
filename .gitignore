@@ -69,3 +69,9 @@ env/
 
 # Local config files
 config.yaml
+
+datasets/
+
+src/test_old/
+data/golden_dataset.json
+Noted_Remark/
