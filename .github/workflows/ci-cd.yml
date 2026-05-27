@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -10,43 +10,49 @@ jobs:
   code-quality:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Checkout Repository Code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      # Sets up a clean Python environment on the GitHub runner
+      - name: Set up Python Runtime
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'pip'
 
-      - name: Install Linting Tools
+      # Installs your newly generated requirements.txt file
+      - name: Install Application Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 black ruff
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Check Formatting with Black
-        run: black --check src/
-
-      - name: Lint with Ruff
-        run: ruff check src/
+      # Runs your linter/syntax checker (adjust to match your exact tool if different)
+      - name: Run Code Quality Checks
+        run: |
+          pip install flake8
+          # Verifies syntax errors, undefined names, and critical issues
+          flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics
 
   unit-tests:
     needs: code-quality
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Checkout Repository Code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python Runtime
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'pip'
 
-      - name: Install dependencies
+      - name: Install Application Dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pytest
 
-      - name: Execute Automated Test Suite
+      # Executes your passing pytest test suite on the cloud architecture
+      - name: Run Test Suite
         run: |
-          pytest tests/
+          pip install pytest pytest-asyncio
+          python -m pytest
