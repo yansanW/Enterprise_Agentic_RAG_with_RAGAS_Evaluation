@@ -8,6 +8,7 @@ import os
 from langchain_chroma import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_ollama import OllamaEmbeddings
+from langchain_community.chat_message_histories import SQLChatMessageHistory  # High-performance SQL history tracker
 from src import config
 
 def _get_embedding_client():
@@ -24,6 +25,7 @@ def _get_embedding_client():
         )
     else:
         raise ValueError(f"Unsupported embedding source configuration: {config.EMBEDDING_SOURCE}")
+
 
 def initialize_vectorstore(chunks=None, persist_directory: str = None):
     """
@@ -51,3 +53,20 @@ def initialize_vectorstore(chunks=None, persist_directory: str = None):
             persist_directory=persist_directory, 
             embedding_function=embeddings
         )
+    
+
+# --- NEW: STATEFUL CONVERSATIONAL MEMORY MANAGER ---
+def get_session_history(session_id: str):
+    """
+    Factory function to retrieve or instantiate a unique persistent chat history 
+    session inside a localized SQLite relational database.
+    """
+    db_path = os.path.join(config.DATA_DIR, "chat_history.db")
+    connection_string = f"sqlite:///{db_path}"
+    
+    # SQLChatMessageHistory automatically sets up the relational tables 
+    # on disk if they do not exist yet!
+    return SQLChatMessageHistory(
+        session_id=session_id,
+        connection=connection_string
+    )

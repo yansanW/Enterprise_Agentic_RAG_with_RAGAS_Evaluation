@@ -79,10 +79,11 @@ class AgenticRAGCore:
         decision = response.content.strip().upper()
         return "RETRIEVE" if "RETRIEVE" in decision else "CHAT"
 
+
     async def aexecute_pipeline(self, query: str, chat_history: list = None) -> GuardedAnswerSchema:
         """
-        Asynchronous Core Pipeline. Coordinates routing, context parsing, 
-        and structured generation guardrails.
+        Asynchronous Core Pipeline. Cohesive routing, conversational query rewriting,
+        context parsing, and structured generation guardrails.
         """
         if chat_history is None:
             chat_history = []
@@ -97,9 +98,28 @@ class AgenticRAGCore:
                 citations=[]
             )
             
+        # --- NEW: CONVERSATIONAL QUERY REWRITING NODE ---
+        search_query = query
+        if len(chat_history) > 0:
+            print("🔄 Past conversation history detected. Executing Query Rewrite Node...")
+            rewrite_prompt = ChatPromptTemplate.from_messages([
+                ("system", "You are an elite query reformulation assistant. "
+                           "Analyze the conversation history and the latest user follow-up question. "
+                           "If the latest question contains pronouns (it, they, their, she, he) or references past topics, "
+                           "rewrite it into a standalone, fully detailed search query optimized for vector database lookups. "
+                           "Do not answer the question. Respond with ONLY the rewritten search query text string."),
+                MessagesPlaceholder(variable_name="history"),
+                ("human", "{query}")
+            ])
+            
+            rewrite_chain = rewrite_prompt | self.llm
+            rewrite_response = await rewrite_chain.ainvoke({"history": chat_history, "query": query})
+            search_query = rewrite_response.content.strip()
+            print(f"🔍 Original query '{query}' successfully rewritten to: '{search_query}'")
+            
         # --- ASYNCHRONOUS RETRIEVAL TRACK ---
-        # Fetch document vectors asynchronously to bypass slow disk I/O blocks
-        docs = await self.retriever.ainvoke(query)
+        # Pass the optimized search_query to the retriever instead of the raw user input!
+        docs = await self.retriever.ainvoke(search_query)
         context_str = "\n\n".join([
             f"[Source: {doc.metadata.get('source', 'Unknown')} | Page: {doc.metadata.get('page', 'N/A')}]\n{doc.page_content}"
             for doc in docs

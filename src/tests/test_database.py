@@ -1,7 +1,8 @@
 # src/tests/test_database.py
 import pytest
 from langchain_core.documents import Document
-from src.database import initialize_vectorstore
+from src.database import initialize_vectorstore, get_session_history
+
 
 def test_vectorstore_initialization_with_sample_chunks(tmp_path):
     """
@@ -38,3 +39,33 @@ def test_vectorstore_initialization_with_sample_chunks(tmp_path):
     # LINE 36 FIX: Verify that the returned text is indeed one of our original seeded chunks
     valid_contents = [chunk.page_content for chunk in sample_chunks]
     assert results[0].page_content in valid_contents
+
+
+def test_sqlite_session_isolation_and_persistence(tmp_path, monkeypatch):
+    """
+    Unit Test: Verifies that SQLChatMessageHistory isolates distinct sessions 
+    and persists chat messages correctly to disk.
+    """
+    from src import config
+    # Divert the history db to a temporary test directory path
+    test_db_dir = str(tmp_path / "test_history.db")
+    monkeypatch.setattr(config, "DATA_DIR", str(tmp_path))
+    
+    # 1. Initialize user session Alpha
+    history_alpha = get_session_history("session_alpha")
+    history_alpha.add_user_message("Hello from Alpha user!")
+    
+    # 2. Initialize user session Beta
+    history_beta = get_session_history("session_beta")
+    history_beta.add_user_message("Hello from Beta user!")
+    
+    # 3. Assert deep state isolation boundaries
+    assert len(history_alpha.messages) == 1
+    assert history_alpha.messages[0].content == "Hello from Alpha user!"
+    
+    assert len(history_beta.messages) == 1
+    assert history_beta.messages[0].content == "Hello from Beta user!"
+    
+    # Verify that session data appends cleanly over multiple turns
+    history_alpha.add_ai_message("Hello! How can I help you?")
+    assert len(history_alpha.messages) == 2
