@@ -50,3 +50,15 @@ CHUNK_OVERLAP = _yaml_config["ingestion"]["chunk_overlap"]
 
 RERANK_TOP_N = _yaml_config["retrieval"]["rerank_top_n"]
 MODEL_NAME = _yaml_config["generation"]["model_name"]
+
+# 1. Get the absolute path of the directory containing config.py (src/)
+_SRC_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# 2. Go up one level to the main project root directory
+BASE_DIR = os.path.dirname(_SRC_DIR)
+
+# 3. Explicitly define the absolute path to your data/ directory
+DATA_DIR = os.path.join(BASE_DIR, _yaml_config["vectorstore"]["persist_directory"])
+
+# Ensure the data directories physically exist on the machine automatically
+os.makedirs(DATA_DIR, exist_ok=True)
