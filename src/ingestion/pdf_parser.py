@@ -4,6 +4,7 @@ Take the PDF reading and dynamic semantic chunking logic out of the app loop and
 
 '''
 from langchain_community.document_loaders import PyPDFLoader
+# from langchain_pdf import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_google_genai import GoogleGenerativeAIEmbeddings

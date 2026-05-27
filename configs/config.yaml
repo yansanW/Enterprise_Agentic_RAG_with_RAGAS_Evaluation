@@ -10,6 +10,7 @@ models:
   google_embedding: "models/gemini-embedding-001"
   ollama_llm: "llama3"
   ollama_embedding: "nomic-embed-text" # Standard local embedding model
+  temperature: 0.0  # Force maximum deterministic reliability
 
 ingestion:
   parser_strategy: "multimodal_vlm" # Options: "standard_text", "multimodal_vlm"
@@ -23,10 +24,13 @@ ingestion:
 
 vectorstore:
   type: "chroma"  # Options: "chroma", "pinecone", "weaviate", etc.
-  persist_directory: "./vectorstore"  # Used for Chroma
+  data_dir: "data"  # Used for Chroma
+  persist_directory: "vectorstore"  # Used for Chroma
 
 retrieval:
-  base_k: 10
+  search_type: "mmr"          # Options: "similarity" or "mmr-Maximum Marginal Relevance"
+  fetch_k: 20                 # The raw pool size initially pulled from disk (fetch_k)
+  base_k: 10                   # The final number of chunks passed to the LLM (k)
   rerank_top_n: 3
   rerank_model: "rerank-v3.5"
 

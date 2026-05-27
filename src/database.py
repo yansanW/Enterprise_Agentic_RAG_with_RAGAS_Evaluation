@@ -4,7 +4,8 @@ vector store setup should live separately so both your ingestion workers and you
 '''
 
 import os
-from langchain_community.vectorstores import Chroma
+# from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_ollama import OllamaEmbeddings
 from src import config
@@ -35,7 +36,7 @@ def initialize_vectorstore(chunks=None, persist_directory: str = None):
     
     # Define a clean persistence storage index folder inside your data directory
     if persist_directory is None:
-        persist_directory = os.path.join(config.DATA_DIR, "vector_store")
+        persist_directory = os.path.join(config.DATA_DIR, "vectorstore")
         
     if chunks:
         print(f"📦 Seeding Chroma DB at {persist_directory} with {len(chunks)} embedded vector chunks...")

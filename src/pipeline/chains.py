@@ -1,71 +1,130 @@
 # src/pipeline/chains.py
-'''
-the pure engine room of your RAG. 
-It has no awareness of Streamlit or FastAPI; it just takes input parameters and builds the LangChain components.
-'''
-
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_cohere import CohereRerank
-from langchain_classic.retrievers import ContextualCompressionRetriever
-from langchain_classic.chains import create_retrieval_chain, create_history_aware_retriever
-from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.output_parsers import PydanticOutputParser
+from langchain_cohere import CohereRerank  # Professional integration package
+from langchain_classic.retrievers import ContextualCompressionRetriever
+from langchain_ollama import ChatOllama
+
 from src import config
+from src.pipeline.schemas import GuardedAnswerSchema
 
-# Intercept string-like token objects coming from the parser to protect the embedding model
-class SafeGoogleEmbeddings(GoogleGenerativeAIEmbeddings):
-    def embed_query(self, text: str) -> list[float]:
-        return super().embed_query(str(text))
 
-def build_agentic_rag_chain(vectorstore):
-    """Assembles the entire history-aware retrieval and rerank pipeline."""
-    
-    # 1. Base retriever pulls a broad selection (e.g., k=10)
-    base_retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
-    
-    # 2. Reranker narrows down to top 3 semantic matches
-    # reranker = CohereRerank(top_n=3, model="rerank-v3.5", cohere_api_key=config.COHERE_API_KEY)
-    # No hardcoding, completely dynamic!
-    reranker = CohereRerank(
-        top_n=config.RERANK_TOP_N, 
-        model="rerank-v3.5", 
-        cohere_api_key=config.COHERE_API_KEY
-    )
-    
-    # 3. Compression pipeline combines them
-    compression_retriever = ContextualCompressionRetriever(
-        base_compressor=reranker, 
-        base_retriever=base_retriever
-    )
-    
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=config.GOOGLE_API_KEY)
-    
-    # ── Contextualization prompt (Query rewriter) ──
-    contextualize_prompt = ChatPromptTemplate.from_messages([
-        ("system",
-         "Given the chat history and the latest user question, "
-         "rewrite the question to be fully self-contained string. "
-         "Do NOT answer it, and do NOT include any introductory filler text. "
-         "If it is already self-contained, return it unchanged."),
-        MessagesPlaceholder("chat_history"),
-        ("human", "{input}"),
-    ])
-    
-    history_aware_retriever = create_history_aware_retriever(
-        llm, compression_retriever, contextualize_prompt
-    )
-    
-    # ── Answer extraction prompt ──
-    qa_prompt = ChatPromptTemplate.from_messages([
-        ("system",
-         "Use the retrieved context below to answer the question. "
-         "If you don't know, say so — don't make things up.\n\n"
-         "{context}"),
-        MessagesPlaceholder("chat_history"),
-        ("human", "{input}"),
-    ])
-    
-    combine_docs_chain = create_stuff_documents_chain(llm, qa_prompt)
-    
-    # Complete multi-stage chain
-    return create_retrieval_chain(history_aware_retriever, combine_docs_chain)
+def _get_llm_client():
+    """Internal Factory helper to instantiate the exact model provider chosen in configs."""
+    if config.LLM_SOURCE == "google":
+        print(f"🤖 Initializing Cloud LLM Core: {config.GOOGLE_LLM}")
+        return ChatGoogleGenerativeAI(
+            model=config.GOOGLE_LLM, 
+            google_api_key=config.GOOGLE_API_KEY,
+            temperature=config.LLM_TEMPERATURE  # Force maximum deterministic reliability
+        )
+    elif config.LLM_SOURCE == "ollama":
+        print(f"🤖 Initializing Local Sovereign LLM Core: {config.OLLAMA_LLM}")
+        return ChatOllama(
+            model=config.OLLAMA_LLM,
+            base_url=config.OLLAMA_URL,
+            temperature=config.LLM_TEMPERATURE  # Force maximum deterministic reliability
+        )
+    else:
+        raise ValueError(f"Unsupported LLM provider configuration: {config.LLM_SOURCE}")
+
+
+class AgenticRAGCore:
+    def __init__(self, vectorstore):
+        self.vectorstore = vectorstore
+
+        # 1. Base Retrieval Phase: Pull a wide pool of candidates
+        base_retriever = vectorstore.as_retriever(
+            search_type=config.SEARCH_TYPE,
+            search_kwargs={"k": config.BASE_TOP_K, 
+                           "fetch_k": config.FETCH_K}
+        )
+
+        # 2. Rerank Phase: Core cross-encoder model setup
+        compressor = CohereRerank(
+            model=config.RERANK_MODEL,
+            cohere_api_key=config.COHERE_API_KEY,
+            top_n=config.RERANK_TOP_N       # Truncate down to top 3 elite matches
+        )
+
+        # 3. Layer the compression router onto the base retriever stream
+        self.retriever = ContextualCompressionRetriever(
+            base_compressor=compressor, 
+            base_retriever=base_retriever
+        )
+        
+        # Instantiate base LLM client with strict deterministic controls
+        self.llm = _get_llm_client()
+        
+        # Explicit parser interface for logging and debugging
+        self.output_parser = PydanticOutputParser(pydantic_object=GuardedAnswerSchema)
+        self.structured_generator = self.llm.with_structured_output(GuardedAnswerSchema)
+
+    async def aroute_query(self, query: str) -> str:
+        """Asynchronously routes the query to optimize multi-user connection queues."""
+        router_prompt = ChatPromptTemplate.from_messages([
+            ("system", "You are an elite triage agent for an enterprise knowledge graph. "
+                       "Analyze the user input string carefully.\n\n"
+                       "CRITERIA:\n"
+                       "- Reply with 'RETRIEVE' if the user asks for data facts, metrics, documents, or technical analysis.\n"
+                       "- Reply with 'CHAT' if the user is greeting you, asking casual questions, or making small talk.\n\n"
+                       "Respond with exactly one word: either 'RETRIEVE' or 'CHAT'. Do not include punctuation."),
+            ("human", "{query}")
+        ])
+        
+        decision_chain = router_prompt | self.llm
+        # Using .ainvoke() processes this concurrently without blocking your server loop!
+        response = await decision_chain.ainvoke({"query": query})
+        decision = response.content.strip().upper()
+        return "RETRIEVE" if "RETRIEVE" in decision else "CHAT"
+
+    async def aexecute_pipeline(self, query: str, chat_history: list = None) -> GuardedAnswerSchema:
+        """
+        Asynchronous Core Pipeline. Coordinates routing, context parsing, 
+        and structured generation guardrails.
+        """
+        if chat_history is None:
+            chat_history = []
+            
+        route = await self.aroute_query(query)
+        print(f"🔀 Cognitive Router selected execution track: {route}")
+        
+        if route == "CHAT":
+            return GuardedAnswerSchema(
+                answer="Hello! I am your enterprise agentic intelligence core. How can I assist your research today?",
+                is_supported_by_context=True,
+                citations=[]
+            )
+            
+        # --- ASYNCHRONOUS RETRIEVAL TRACK ---
+        # Fetch document vectors asynchronously to bypass slow disk I/O blocks
+        docs = await self.retriever.ainvoke(query)
+        context_str = "\n\n".join([
+            f"[Source: {doc.metadata.get('source', 'Unknown')} | Page: {doc.metadata.get('page', 'N/A')}]\n{doc.page_content}"
+            for doc in docs
+        ])
+        
+        # Professional prompt template engineering with strict behavioral rules
+        qa_prompt = ChatPromptTemplate.from_messages([
+            ("system", "You are a sovereign enterprise AI assistant bound to a strict knowledge contract.\n\n"
+                       "INSTRUCTIONS:\n"
+                       "1. Build your answer using ONLY the verified context fragments provided below.\n"
+                       "2. If the context does not contain sufficient facts to answer the question, set 'is_supported_by_context' to false and output exactly: 'Information not found within verified knowledge base.'\n"
+                       "3. Do not assume, extrapolate, or hallucinate metrics.\n"
+                       "4. Populate the 'citations' array with exact string snippets used from the context.\n\n"
+                       "VERIFIED REPOSITORY CONTEXT:\n{context}"),
+            MessagesPlaceholder(variable_name="history"),
+            ("human", "{query}")
+        ])
+        
+        # Construct message payload matrix
+        formatted_messages = qa_prompt.format_messages(
+            context=context_str,
+            history=chat_history,
+            query=query
+        )
+        
+        # Invoke the structured generation decoder asynchronously
+        structured_response = await self.structured_generator.ainvoke(formatted_messages)
+        return structured_response

@@ -42,14 +42,18 @@ GOOGLE_LLM = _yaml_config["models"]["google_llm"]
 GOOGLE_EMBEDDING = _yaml_config["models"]["google_embedding"]
 OLLAMA_LLM = _yaml_config["models"]["ollama_llm"]
 OLLAMA_EMBEDDING = _yaml_config["models"]["ollama_embedding"]
+LLM_TEMPERATURE = _yaml_config["models"].get("temperature", 0.0)  # Default to 0.0 if not specified
 
 PARSER_STRATEGY = _yaml_config["ingestion"]["parser_strategy"].lower()
 SPLITTER_TYPE = _yaml_config["ingestion"]["splitter_type"].lower()
 CHUNK_SIZE = _yaml_config["ingestion"]["chunk_size"]
 CHUNK_OVERLAP = _yaml_config["ingestion"]["chunk_overlap"]
 
+SEARCH_TYPE = _yaml_config["retrieval"].get("search_type", "mmr").lower()
+FETCH_K = _yaml_config["retrieval"].get("fetch_k", 10)
+BASE_TOP_K = _yaml_config["retrieval"]["base_k"]
 RERANK_TOP_N = _yaml_config["retrieval"]["rerank_top_n"]
-MODEL_NAME = _yaml_config["generation"]["model_name"]
+RERANK_MODEL = _yaml_config["generation"]["model_name"]
 
 # 1. Get the absolute path of the directory containing config.py (src/)
 _SRC_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -58,7 +62,8 @@ _SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(_SRC_DIR)
 
 # 3. Explicitly define the absolute path to your data/ directory
-DATA_DIR = os.path.join(BASE_DIR, _yaml_config["vectorstore"]["persist_directory"])
+DATA_DIR = os.path.join(BASE_DIR, _yaml_config["vectorstore"]["data_dir"])
+
 
 # Ensure the data directories physically exist on the machine automatically
 os.makedirs(DATA_DIR, exist_ok=True)
