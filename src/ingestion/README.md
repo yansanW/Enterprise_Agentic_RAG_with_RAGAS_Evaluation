@@ -1,33 +1,40 @@
-# Module 1: Ingestion & Layout-Aware Parsing Engine
+# Module 1: Layout-Aware & Multimodal Document Ingestion Pipeline
 
 ## Overview
-The Ingestion module handles the system's data input boundaries. Rather than treating documents as flat text strings, this component is designed as an adaptive pipeline that dynamically responds to document layout complexity (text paragraphs vs. multi-column research papers and embedded grid tables).
+The Ingestion module handles the parsing, structural breakdown, and normalization of raw incoming documents before they are transformed into mathematical vectors. Instead of treating text as a flat, unformatted character stream, this pipeline preserves layout structures and processes rich visual assets (such as diagrams, charts, and embedded images) to protect critical semantic context for downstream generation.
+
+```
+Raw Documents ➔ Specialized Parsers (pdf / multimodal) ➔ Database Indexer (database.py)
+```
+---
 
 ## Architectural Design Patterns
 
-### 1. The Strategy Pattern (Layout Dissection)
-Instead of processing all files through a monolithic parser loop, we decouple file types into distinct processing strategies:
-* **`pdf_parser.py` / `multimodal_parser.py`:** Integrates PyMuPDF (`fitz`) for low-latency bounding-box extraction. If a document page contains structural grid elements or visual charts, the pipeline isolates them, tagging chunks with metadata metrics (`{"type": "table"}` or `{"type": "text"}`) to prepare them for downstream Vision-Language Model (VLM) context extraction.
-* **`video_parser.py`:** Extracted YouTube audio streams via `yt-dlp` and processes automatic speech recognition (ASR) locally using an execution of the **OpenAI Whisper** model, saving chunk offsets with precise visual timestamp markers.
+### 1. Layout-Aware Parsing Pattern
+When processing dense technical papers or corporate records, naive text scrapers flatten structural layout markers, turning complex table grids and columns into unreadable walls of text. This module isolates the parsing loops via dedicated extraction loaders (`pdf_parser.py`) to preserve structural boundaries:
+* **Structural Preservation:** Headers, footers, and side-by-side data columns maintain spatial proximity logic.
+* **Metadata Attachment:** Original source attributes, file names, and specific document page indices are appended to every chunk object automatically, facilitating upstream verification and citation paths.
 
-### 2. Factory Pattern Configuration Routing
-The initialization logic reads structural options directly from `configs/config.yaml`. By setting parameters like `parser_strategy: "multimodal_vlm"`, the system switches core engines at runtime without requiring any manual modification of production Python scripts.
+### 2. Multimodal Extraction Pattern (`multimodal_parser.py`)
+To process enterprise knowledge bases that rely heavily on visual figures, financial charts, and technical schemas, the ingestion layer includes a dedicated multimodal parser. 
+* **Visual Representation Processing:** Instead of ignoring embedded images or rendering them as unreadable text blocks, this component processes images or layouts using vision-capable model nodes.
+* **Contextual Image Summarization:** Visual elements are converted into descriptive textual summaries or structured data blocks that retain 100% of the chart's original data properties, allowing the vector database to cleanly index figures for semantic text searching.
 
----
-
-## Technical Decisions & Trade-offs
-
-### Naive Text Extraction vs. Spatial Multimodal Parsing
-Standard text readers (e.g., PyPDF) extract text left-to-right, completely scrambling reading sequences in multi-column research layouts and turning tabular cells into chaotic, unsearchable tokens. 
-
-* **The Trade-off:** Slicing page coordinates and routing blocks to visual-language encoders increases the compute overhead and token latency during the initial document upload phase. However, this trade-off is mathematically justified because it prevents downstream LLM hallucinations and significantly boosts **Context Precision** during RAGAS evaluations.
+### 3. Overlapping Sliders (Recursive Chunking)
+To prevent critical facts or technical details from being cut in half at a hard text-limit boundary, the pipeline utilizes an overlapping sliding window strategy:
+* **Chunk Size:** Configured to balance semantic density and processing efficiency.
+* **Chunk Overlap:** Maintains text boundaries between adjacent chunks, guaranteeing that sentences spanning across chunk splits retain their context in at least one vector window.
 
 ---
 
-## Automated Verification Loop
-This module is fully decoupled from presentation application layers (Streamlit / FastAPI), making it perfectly testable in complete isolation. 
+## Component Layout & Responsibilities
 
-Unit tests are written inside `tests/test_ingestion.py` using `pytest`. The suite implements `monkeypatch` configuration mocking and custom PyMuPDF fault-injection boundaries (`fitz.FileNotFoundError`) to ensure strict error handling before code changes are pushed to deployment registries.
-```
-python -m pytest src/tests/test_ingestion.py
-```
+* **`pdf_parser.py`:** Standard structural loader that reads raw disk binaries, extracts page text layout grids, and structures them into clean text chunk arrays.
+* **`multimodal_parser.py`:** Advanced parsing asset designed to isolate, extract, and interpret visual diagrams, embedded images, and data figures using multimodal processing engines.
+
+---
+
+## Testing & Pipeline Verification
+The extraction accuracy, multimodal parsing stability, and chunk sizing constraints are validated continuously using automated mocks inside `src/tests/test_ingestion.py`. 
+
+The test cases isolate local file system storage boundaries using isolated temporary directories (`tmp_path`), ensuring that your code can cleanly parse sample inputs and enforce precise split structures across all continuous integration environments without depending on external asset paths or hitting active cloud endpoints.
