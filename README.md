@@ -1,6 +1,6 @@
 # Enterprise-Agentic-RAG-with-RAGAS-Evaluation
 
-## Key Architectural Features & Engineering Demonstrations
+## Architectural Features & Engineering Demonstrations
 ---
 This project demonstrates a production-ready, headless **Enterprise Multimodal RAG Engine** optimized for layout-dense documents (research papers, financial tables, media feeds).
 
