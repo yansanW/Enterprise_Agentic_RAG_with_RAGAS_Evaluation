@@ -1,14 +1,34 @@
 # src/evaluation/optimizer.py
 import os
+import sys
+from types import ModuleType
+
+# --- CRITICAL RUNTIME GUARD: MOCK LEGACY LANGCHAIN ROUTE ---
+try:
+    import langchain_community.chat_models.vertexai
+except ModuleNotFoundError:
+    mock_vertex_mod = ModuleType("langchain_community.chat_models.vertexai")
+    mock_vertex_mod.ChatVertexAI = type("ChatVertexAI", (object,), {})
+    sys.modules["langchain_community.chat_models.vertexai"] = mock_vertex_mod
+
 import asyncio
+import json
 from datasets import Dataset
 from ragas import evaluate
-from ragas.metrics import faithfulness, answer_relevance, context_precision, context_recall
+
+# Import the metric classes
+from ragas.metrics import (
+    Faithfulness,
+    AnswerRelevancy,
+    ContextPrecision,
+    ContextRecall
+)
+from ragas.llms import LangchainLLMWrapper
+from ragas.embeddings import LangchainEmbeddingsWrapper
+
 from src.database import initialize_vectorstore
 from src.pipeline.chains import AgenticRAGCore
-import json
-import config
-
+from src import config
 
 async def run_evaluation_suite():
     """
@@ -30,6 +50,15 @@ async def run_evaluation_suite():
     # Boot up pipeline engine blocks
     vectorstore = initialize_vectorstore()
     agent_system = AgenticRAGCore(vectorstore=vectorstore)
+
+    # --- EXPLICIT COMPONENT WRAPPING ---
+    try:
+        ragas_llm = LangchainLLMWrapper(agent_system.llm)
+        ragas_embeddings = LangchainEmbeddingsWrapper(vectorstore.embeddings)
+    except Exception as e:
+        print(f"⚠️ Model extraction warning: {e}. Falling back to default initialization layers.")
+        ragas_llm = None
+        ragas_embeddings = None
     
     queries = []
     answers = []
@@ -59,23 +88,37 @@ async def run_evaluation_suite():
     
     print("📊 Computing RAGAS Semantic Alignment Metrics...")
     
+    # --- INITIALIZE METRIC OBJECTS EXPLICITLY ---
+    # We instantiate each metric class with your local llama3 wrappers
+    initialized_metrics = [
+        Faithfulness(llm=ragas_llm),
+        AnswerRelevancy(llm=ragas_llm, embeddings=ragas_embeddings),
+        ContextPrecision(llm=ragas_llm),
+        ContextRecall(llm=ragas_llm)
+    ]
+    
     # 4. Execute mathematical grading matrix over the dataset
     score_results = evaluate(
         dataset=dataset,
-        metrics=[config.FAITHFULNESS_METRIC, 
-                 config.ANSWER_RELEVANCE_METRIC, 
-                 config.CONTEXT_PRECISION_METRIC, 
-                 config.CONTEXT_RECALL_METRIC]
-        
+        metrics=initialized_metrics
     )
     
     print("\n=======================================================")
     print("📈 FINAL SYSTEM OPTIMIZATION SCORECARD")
     print("=======================================================")
-    for metric_name, score in score_results.items():
-        print(f"🔹 {metric_name.upper():<20} : {score:.4f}")
+    # Using .to_pandas().to_dict(orient="records") or iterating over scores:
+    # If scores is a list of dictionaries, we can consolidate or iterate them safely:
+    try:
+        # Convert the evaluation result directly into a clean flat dictionary
+        final_scores_dict = score_results.to_pandas().mean(numeric_only=True).to_dict()
+        
+        for metric_name, score in final_scores_dict.items():
+            print(f"🔹 {metric_name.upper():<20} : {score:.4f}")
+            
+    except Exception:
+        # Fallback tracking if pandas operations are restricted in your environment
+        print(f"📊 Raw Evaluation Scores Result Container: {score_results.scores}")
     print("=======================================================\n")
-    
     return score_results
 
 if __name__ == "__main__":
