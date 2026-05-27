@@ -59,9 +59,8 @@ Enterprise_Agentic_RAG_with_RAGAS_Evaluation/
 │   │   ├── main.py            # Headless FastAPI app gateway
 │   │   └── README.md
 │   │
-│   └── eval/                  # Domain 4: Evaluation with RAGAS
-│   ├── eval_ragas.py          # Evaluation engine (already built!)
-│   └── app_fastapi.py         # Headless API gateway (replaces Streamlit)
+│   └── evaluation/            # Domain 4: Evaluation with RAGAS
+│   ├── optimizer.py           # Evaluation engine (already built!)
 │   │
 ├── tests/                     # Unit & Integration tests
 │   ├── test_conf.py
