@@ -36,7 +36,11 @@ Enterprise_Agentic_RAG_with_RAGAS_Evaluation/
 │       └── ci-cd.yml               # GitHub Actions CI/CD pipeline
 │
 ├── configs/
-│   └── config.yaml
+│   └── config.yaml│
+│
+├── data/
+│   ├── raw_docs/              # Place test PDFs here
+│   └── golden_dataset.json    # Your offline evaluation Q&A pairs
 │
 ├── src/
 │   ├── __init__.py
@@ -60,18 +64,15 @@ Enterprise_Agentic_RAG_with_RAGAS_Evaluation/
 │   │   └── README.md
 │   │
 │   └── evaluation/            # Domain 4: Evaluation with RAGAS
-│   ├── optimizer.py           # Evaluation engine (already built!)
+│   │   └── optimizer.py       # Evaluation engine (already built!)
 │   │
 ├── tests/                     # Unit & Integration tests
 │   ├── test_conf.py
 │   ├── test_ingestion.py
 │   ├── test_databse.py
 │   ├── test_pipeline.py
-│   └── test_api.py
-│
-├── data/
-│   ├── raw_docs/              # Place test PDFs here
-│   └── golden_dataset.json    # Your offline evaluation Q&A pairs
+│   ├── test_api.py
+│   └── test_evaluation.py
 │
 ├── README.md
 ├── .env.example               # Template for secrets (API keys)
