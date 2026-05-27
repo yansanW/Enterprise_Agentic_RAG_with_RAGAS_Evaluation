@@ -21,6 +21,9 @@ ingestion:
   breakpoint_threshold_type: "percentile"  # CORRECT: Options: "percentile" or "absolute". Determines how the breakpoint threshold is calculated for semantic chunking.
   breakpoint_threshold_amount: 95  # CORRECT: Controls chunk size when using "percentile" type
 
+vectorstore:
+  type: "chroma"  # Options: "chroma", "pinecone", "weaviate", etc.
+  persist_directory: "./vectorstore"  # Used for Chroma
 
 retrieval:
   base_k: 10
