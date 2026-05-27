@@ -69,7 +69,3 @@ os.makedirs(DATA_DIR, exist_ok=True)
 
 golden_dataset_path = _yaml_config["evaluation"]["golden_ragas_dataset_path"]
 GOLDEN_DATASET_PATH = os.path.join(BASE_DIR, golden_dataset_path)
-FAITHFULNESS_METRIC = _yaml_config["evaluation"]["metrics"][0]
-ANSWER_RELEVANCE_METRIC = _yaml_config["evaluation"]["metrics"][1]
-CONTEXT_PRECISION_METRIC = _yaml_config["evaluation"]["metrics"][2]
-CONTEXT_RECALL_METRIC = _yaml_config["evaluation"]["metrics"][3]
