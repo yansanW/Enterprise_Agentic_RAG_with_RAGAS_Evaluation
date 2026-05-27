@@ -53,7 +53,7 @@ SEARCH_TYPE = _yaml_config["retrieval"].get("search_type", "mmr").lower()
 FETCH_K = _yaml_config["retrieval"].get("fetch_k", 10)
 BASE_TOP_K = _yaml_config["retrieval"]["base_k"]
 RERANK_TOP_N = _yaml_config["retrieval"]["rerank_top_n"]
-RERANK_MODEL = _yaml_config["generation"]["model_name"]
+RERANK_MODEL = _yaml_config["retrieval"]["rerank_model"]
 
 # 1. Get the absolute path of the directory containing config.py (src/)
 _SRC_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -64,6 +64,12 @@ BASE_DIR = os.path.dirname(_SRC_DIR)
 # 3. Explicitly define the absolute path to your data/ directory
 DATA_DIR = os.path.join(BASE_DIR, _yaml_config["vectorstore"]["data_dir"])
 
-
 # Ensure the data directories physically exist on the machine automatically
 os.makedirs(DATA_DIR, exist_ok=True)
+
+golden_dataset_path = _yaml_config["evaluation"]["golden_ragas_dataset_path"]
+GOLDEN_DATASET_PATH = os.path.join(BASE_DIR, golden_dataset_path)
+FAITHFULNESS_METRIC = _yaml_config["evaluation"]["metrics"][0]
+ANSWER_RELEVANCE_METRIC = _yaml_config["evaluation"]["metrics"][1]
+CONTEXT_PRECISION_METRIC = _yaml_config["evaluation"]["metrics"][2]
+CONTEXT_RECALL_METRIC = _yaml_config["evaluation"]["metrics"][3]

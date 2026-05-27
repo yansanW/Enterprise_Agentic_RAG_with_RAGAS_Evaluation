@@ -34,6 +34,7 @@ retrieval:
   rerank_top_n: 3
   rerank_model: "rerank-v3.5"
 
-generation:
-  model_name: "gemini-2.5-flash"
-  temperature: 0.2
+evaluation:
+  golden_ragas_dataset_path: "data/golden_dataset.json"  # Path to the golden RAGas dataset for evaluation
+  metrics: ["faithfulness", "answer_relevance", "context_precision", "context_recall"]  # Metrics to evaluate on
+  
