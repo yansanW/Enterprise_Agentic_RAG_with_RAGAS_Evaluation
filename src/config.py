@@ -19,7 +19,7 @@ OLLAMA_URL = os.getenv("OLLAMA_BASE_URL")
 # 2. Test the connection to Ollama with the provided configuration
 client = ollama.Client(host=OLLAMA_URL)
 response = client.generate(model=OLLAMA_MODEL, prompt="Hello, Llama!")
-print(response['response'])
+print(response["response"])
 
 # 3. Parse the structural hyperparameters from the YAML configuration
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "configs", "config.yaml")
@@ -32,17 +32,23 @@ LLM_SOURCE = _yaml_config["provider"]["llm_source"].lower()
 EMBEDDING_SOURCE = _yaml_config["provider"]["embedding_source"].lower()
 
 if LLM_SOURCE not in ["google", "ollama"]:
-    raise ValueError(f"Unsupported LLM source: {LLM_SOURCE}. Supported sources are 'google' and 'ollama'.")
+    raise ValueError(
+        f"Unsupported LLM source: {LLM_SOURCE}. Supported sources are 'google' and 'ollama'."
+    )
 
 if EMBEDDING_SOURCE not in ["google", "ollama"]:
-    raise ValueError(f"Unsupported embedding source: {EMBEDDING_SOURCE}. Supported sources are 'google' and 'ollama'.")
+    raise ValueError(
+        f"Unsupported embedding source: {EMBEDDING_SOURCE}. Supported sources are 'google' and 'ollama'."
+    )
 
 
 GOOGLE_LLM = _yaml_config["models"]["google_llm"]
 GOOGLE_EMBEDDING = _yaml_config["models"]["google_embedding"]
 OLLAMA_LLM = _yaml_config["models"]["ollama_llm"]
 OLLAMA_EMBEDDING = _yaml_config["models"]["ollama_embedding"]
-LLM_TEMPERATURE = _yaml_config["models"].get("temperature", 0.0)  # Default to 0.0 if not specified
+LLM_TEMPERATURE = _yaml_config["models"].get(
+    "temperature", 0.0
+)  # Default to 0.0 if not specified
 
 PARSER_STRATEGY = _yaml_config["ingestion"]["parser_strategy"].lower()
 SPLITTER_TYPE = _yaml_config["ingestion"]["splitter_type"].lower()

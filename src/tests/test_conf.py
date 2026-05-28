@@ -1,8 +1,7 @@
 # tests/conftest.py
 import os
-import pytest
 
-# Global testing gatekeeper: Inject mock/dummy variables 
+# Global testing gatekeeper: Inject mock/dummy variables
 # so tests stay isolated from active cloud billings or local network drops
 os.environ["GOOGLE_API_KEY"] = "mock_testing_key_abcdefg"
 os.environ["COHERE_API_KEY"] = "mock_cohere_key_123456"
