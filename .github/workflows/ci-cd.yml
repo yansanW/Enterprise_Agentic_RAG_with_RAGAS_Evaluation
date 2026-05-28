@@ -56,3 +56,20 @@ jobs:
         run: |
           pip install pytest pytest-asyncio
           python -m pytest
+  
+  docker-build:
+    needs: code-quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t enterpriserag .
+
+      # Optionally run tests inside the container
+      - name: Run tests in Docker
+        run: docker run --rm --network=host enterpriserag pytest
