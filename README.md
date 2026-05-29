@@ -2,28 +2,25 @@
 
 ## Architectural Features & Engineering Demonstrations
 ---
-This project demonstrates a production-ready, headless **Enterprise Multimodal RAG Engine** optimized for layout-dense documents (research papers, financial tables, media feeds).
+This repository showcases a production-ready, **headless Enterprise Agentic RAG (Retrieval-Augmented Generation) Engine** optimized for parsing layout-dense documents, persistent semantic search, and automated offline optimization.
 
-### 1. Spatial Ingestion Engine: 
-(`src/ingestion/`)
-* Replaced naive left-to-right text extraction with layout-aware parsing via PyMuPDF (`fitz`). 
-* Structurally isolates tables and visual grids, tagging assets with metadata matrices (`{"type": "table"}`) to preserve contextual geometric layouts.
+### 1. Spatial Ingestion Engine (`src/ingestion/`)
+* Replaced naive text-scraping extractions with layout-aware structural parsing via PyMuPDF (`fitz`).
+* Isolates text layers and document structures, preparing visual and structural blocks for semantic chunking to preserve layout boundaries during database vectorization.
 
-### 2. Cross-Modal Data Tracks:
-* Processes multimedia links dynamically. 
-* Downloads and transcribes video streams locally using **OpenAI Whisper** with microsecond time-offset indexing.
+### 2. Cognitive Routing Matrix (`src/pipeline/`)
+* Implements an intelligent **Cognitive Router** that evaluates incoming user query intent in real-time.
+* Dynamically switches execution tracks between **`RETRIEVE`** (for fact-based database vector searches) and **`CHAT`** (for general conversational context) to protect system efficiency and minimize token waste.
 
-### 3. Deterministic Guardrails:
-(`src/pipeline/`)
-* Implements **Pydantic** schema validation forced directly onto LLM decoding layers, guaranteeing strict JSON responses and automated fallback handling if context boundaries are leaked.
+### 3. Deterministic Guardrails (`src/pipeline/`)
+* Enforces structural **Pydantic** schema validation directly onto LLM decoding layers, guaranteeing strict JSON output responses and protecting against context boundary leakage.
 
-### 4. Rigorous MLOps Validation:
-(`src/eval/`)
-* Utilizes an automated **RAGAS Evaluation pipeline** against a curated offline Golden Dataset to analytically optimize *Context Precision* and *Faithfulness*.
+### 4. Rigorous MLOps Validation Suite (`src/evaluation/`)
+* Couples an automated **RAGAS Evaluation framework** with an offline target validation dataset to completely decouple test data from pipeline execution.
+* Calculates mathematical score metrics across four independent vectors: *Faithfulness*, *Answer Relevance*, *Context Precision*, and *Context Recall* utilizing a local sovereign model (**Ollama / Llama3**).
 
-### 5. Sovereign Cloud Deployment:
-*  Implements a strict **Factory & Strategy Design Pattern** to seamlessly switch backends between cloud endpoints (Gemini API) and fully local tensor execution (Ollama) via `config.yaml`. 
-* Delivered as a headless, containerized **FastAPI** application with **Docker Compose**.
+### 5. Sovereign Cloud Execution (`src/api/`)
+* Delivers a headless, enterprise-grade **FastAPI** application workspace wrapped in an automated GitHub Actions CI/CD quality gate, fully configured for containerized deployment via Docker Compose.
 
 
 ## Project Structure
