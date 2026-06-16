@@ -8,28 +8,14 @@ from langchain_ollama import ChatOllama
 
 from src import config
 from src.pipeline.schemas import GuardedAnswerSchema
+from src.factory import ModelFactory
 from typing import Optional, Any
 
 
 def _get_llm_client():
     """Internal Factory helper to instantiate the exact model provider chosen in configs."""
-    if config.LLM_SOURCE == "google":
-        print(f"🤖 Initializing Cloud LLM Core: {config.GOOGLE_LLM}")
-        return ChatGoogleGenerativeAI(
-            model=config.GOOGLE_LLM,
-            google_api_key=config.GOOGLE_API_KEY,
-            temperature=config.LLM_TEMPERATURE,  # Force maximum deterministic reliability
-        )
-    elif config.LLM_SOURCE == "ollama":
-        print(f"🤖 Initializing Local Sovereign LLM Core: {config.OLLAMA_LLM}")
-        return ChatOllama(
-            model=config.OLLAMA_LLM,
-            base_url=config.OLLAMA_URL,
-            temperature=config.LLM_TEMPERATURE,  # Force maximum deterministic reliability
-        )
-    else:
-        raise ValueError(f"Unsupported LLM provider configuration: {config.LLM_SOURCE}")
-
+    return ModelFactory.get_llm()
+    
 
 class AgenticRAGCore:
     def __init__(self, vectorstore):
