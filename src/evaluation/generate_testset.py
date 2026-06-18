@@ -23,6 +23,7 @@ from langchain_core.documents import Document
 from src import config
 # from .ingest import load_local_papers, chunk_documents
 from src.database import initialize_vectorstore
+from src.factory import ModelFactory
 from src.ingestion import PDFIngestionEngine, MultimodalParser
 
 
@@ -48,21 +49,12 @@ def generate_testset(
     logger.info(f"Generating {test_size} test questions from {len(documents)} chunks...")
     logger.info("This runs once and saves to disk — grab a coffee, takes ~5 minutes.")
 
-    # Use same Ollama models as the rest of the pipeline
-    generator_llm = ChatOllama(
-            model=config.OLLAMA_LLM,
-            base_url=config.OLLAMA_URL,
-            # temperature=config.LLM_TEMPERATURE,  # Force maximum deterministic reliability
-        )
-     # critic reviews generated questions for quality
-    critic_llm = ChatOllama(      
-        model=config.OLLAMA_LLM,
-        base_url=config.OLLAMA_URL,
-    )
-    embeddings = OllamaEmbeddings(
-        model=config.OLLAMA_EMBEDDING,
-        base_url=config.OLLAMA_URL,
-    )
+    # --- CLEAN UNIFIED FACTORY CALLS ---
+    # No more duplicate hardcoded ChatOllama blocks!
+    generator_llm = ModelFactory.get_llm()
+    critic_llm = ModelFactory.get_llm()
+    embeddings = ModelFactory.get_embeddings()
+
 
     generator = TestsetGenerator(
         llm=generator_llm,

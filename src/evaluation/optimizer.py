@@ -21,6 +21,7 @@ from ragas.metrics import Faithfulness, AnswerRelevancy, ContextPrecision, Conte
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
 
+from src.factory import ModelFactory
 from src.database import initialize_vectorstore
 from src.pipeline import AgenticRAGCore
 from src import config
@@ -49,16 +50,19 @@ async def run_evaluation_suite():
     vectorstore = initialize_vectorstore()
     agent_system = AgenticRAGCore(vectorstore=vectorstore)
 
-    # --- EXPLICIT COMPONENT WRAPPING ---
-    try:
-        ragas_llm = LangchainLLMWrapper(agent_system.llm)
-        ragas_embeddings = LangchainEmbeddingsWrapper(vectorstore.embeddings)
-    except Exception as e:
-        print(
-            f"⚠️ Model extraction warning: {e}. Falling back to default initialization layers."
-        )
-        ragas_llm = None
-        ragas_embeddings = None
+    # --- UNIFIED FACTORY INJECTION ---
+    # We explicitly request clean wrappers from our factory. This bypasses
+    # internal class introspection bugs and prevents script fracturing!
+    ragas_llm = ModelFactory.get_ragas_llm()
+    ragas_embeddings = ModelFactory.get_ragas_embeddings()
+    # try:
+    #     ragas_llm = LangchainLLMWrapper(agent_system.llm) 
+    #     ragas_embeddings = LangchainEmbeddingsWrapper(vectorstore.embeddings)
+    # except Exception as e:
+    #     print(f"⚠️ Model extraction warning: {e}. Falling back to clean Factory calls.")
+    #     # Seamless failover backup plan
+    #     ragas_llm = LangchainLLMWrapper(ModelFactory.get_llm())
+    #     ragas_embeddings = LangchainEmbeddingsWrapper(ModelFactory.get_embeddings())
 
     queries = []
     answers = []
