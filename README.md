@@ -62,16 +62,15 @@ multimodal-enterprise-rag-engine/
 │       ├── golden_dataset.json     # Decoupled validation ground-truths and test cases
 │       └── optimizer.py            # RAGAS metric validation calculation suite
 │
-├── tests/                          # Unit & Integration Validation Matrix
-│   ├── test_api.py
-│   ├── test_database.py
-│   ├── test_evaluation.py          # Automated mock testing for evaluation integrity
-│   ├── test_ingestion.py
-│   └── test_pipeline.py
+│   └── tests/                    # Unit and integration tests
+│       ├── test_api.py
+│       ├── test_database.py
+│       ├── test_evaluation.py
+│       ├── test_ingestion.py
+│       └── test_pipeline.py
 │
 ├── .env.example                    # Environmental configuration template for secrets
 ├── Dockerfile                      # Application containerization manifest
-├── docker-compose.yml              # Multi-container orchestration config
 ├── pytest.ini                      # Python test configurations
 └── requirements.txt                # Fixed application runtime dependency lock
 
@@ -81,8 +80,8 @@ multimodal-enterprise-rag-engine/
 
 ### 1. Clone and Setup Environment
 ```
-git clone ...
-cd multimodal-enterprise-rag-engine
+git clone https://github.com/yansanW/Enterprise_Agentic_RAG_with_RAGAS_Evaluation.git
+cd Enterprise_Agentic_RAG_with_RAGAS_Evaluation
 ```
 
 ### 2. Configure Local Secrets
@@ -99,16 +98,12 @@ pip install -r requirements.txt
 ```
 
 ### 3.b. Containerized Deployment with Docker
-This repository includes a multi-container `docker-compose` setup to orchestrate both the headless FastAPI application gateway and a persistent volume layer for your local Chroma vector store seamlessly.
-
-#### 1. Prerequisites
-Ensure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed on your host machine. If you plan to utilize local sovereign models (`llama3`), ensure your local [Ollama instance](https://ollama.com/) is running on your host system.
-
-#### 2. Build and Launch the Stack
-To build the application image and spin up the container network in detached (background) mode, execute:
+Ensure Docker is installed, then build and run the API image:
 ```
-docker-compose up --build -d
+docker build -t enterprise-agentic-rag .
+docker run --rm -p 8000:8000 --env-file .env enterprise-agentic-rag
 ```
+The repository intentionally does not include Docker Compose because the current prototype runs as a single application container. If you select Ollama, make its host endpoint reachable from the container and set `OLLAMA_BASE_URL` accordingly.
 
 ### 4. Run the Headless Server Gateway
 To start the FastAPI server application locally, run:
