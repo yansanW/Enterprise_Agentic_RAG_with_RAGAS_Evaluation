@@ -1,27 +1,39 @@
 # Enterprise-Agentic-RAG-with-RAGAS-Evaluation
 
-## Architectural Features & Engineering Demonstrations
----
-This repository showcases a production-ready, **headless Enterprise Agentic RAG (Retrieval-Augmented Generation) Engine** optimized for parsing layout-dense documents, persistent semantic search, and automated offline optimization.
+## What This Prototype Implements
 
-### 1. Spatial Ingestion Engine (`src/ingestion/`)
-* Replaced naive text-scraping extractions with layout-aware structural parsing via PyMuPDF (`fitz`).
-* Isolates text layers and document structures, preparing visual and structural blocks for semantic chunking to preserve layout boundaries during database vectorization.
+This repository is an engineering prototype for a headless RAG API. It combines PDF text extraction, table detection, persistent Chroma retrieval, intent routing, structured LLM output, and RAGAS evaluation. It is not production-ready.
 
-### 2. Cognitive Routing Matrix (`src/pipeline/`)
-* Implements an intelligent **Cognitive Router** that evaluates incoming user query intent in real-time.
-* Dynamically switches execution tracks between **`RETRIEVE`** (for fact-based database vector searches) and **`CHAT`** (for general conversational context) to protect system efficiency and minimize token waste.
+### Ingestion
 
-### 3. Deterministic Guardrails (`src/pipeline/`)
-* Enforces structural **Pydantic** schema validation directly onto LLM decoding layers, guaranteeing strict JSON output responses and protecting against context boundary leakage.
+- `standard_text` uses `PyPDFLoader` and then the configured static or semantic splitter.
+- `multimodal_vlm` uses PyMuPDF to extract page text and detect tables. The current table content is a fixed placeholder; images are not interpreted by a vision-language model.
+- Chunks carry source, page, and text/table metadata. The implementation does not reconstruct or preserve the original spatial layout.
 
-### 4. Rigorous MLOps Validation Suite (`src/evaluation/`)
-* Couples an automated **RAGAS Evaluation framework** with an offline target validation dataset to completely decouple test data from pipeline execution.
-* Calculates mathematical score metrics across four independent vectors: *Faithfulness*, *Answer Relevance*, *Context Precision*, and *Context Recall* utilizing a local sovereign model (**Ollama / Llama3**).
+### Routing and generation
 
-### 5. Sovereign Cloud Execution (`src/api/`)
-* Delivers a headless, enterprise-grade **FastAPI** application workspace wrapped in an automated GitHub Actions CI/CD quality gate, fully configured for containerized deployment via Docker Compose.
+- An LLM classifies each request as `RETRIEVE` or `CHAT`.
+- `RETRIEVE` queries the vector store and asks the configured LLM for a `GuardedAnswerSchema`.
+- `CHAT` intentionally bypasses retrieval and returns a fixed greeting. It is not a general conversational track.
+- Pydantic enforces the response shape (`answer`, `is_supported_by_context`, and `citations`). The support flag and citations are model-generated and are not independently verified or fact-checked.
 
+### Evaluation
+
+The RAGAS suite reads a saved golden dataset and evaluates the active configured pipeline. Its judge LLM and embeddings come from the selected Google or Ollama providers; local Ollama execution is optional, not the default guarantee. Default tests mock or skip provider-dependent paths. Passing mocked tests does not demonstrate the quality of a live local model.
+
+## Roadmap / Known Limitations
+
+This project keeps an enterprise RAG architecture as its direction, but the current implementation has important gaps:
+
+- No authentication, authorization, rate limiting, telemetry, database migrations, or production operations tooling.
+- No VLM integration, image understanding, chart-accuracy measurement, audio ingestion, or Whisper transcription. Those are roadmap items.
+- Table detection exists, but table transcription is currently placeholder content.
+- Source/page/type metadata survives ingestion; spatial relationships and visual layout do not.
+- Structured output constrains shape only. Citation validation and independent fact verification remain future work.
+- `CHAT` is an intentional canned-response bypass rather than open-ended conversation.
+- Async interfaces are used around the pipeline, but Chroma and SQLite are disk-backed and the system has not been load-tested. No concurrency or scale benchmark is claimed.
+- Provider-backed integration tests require an explicit opt-in and valid local/cloud credentials.
+- The API can report healthy while the RAG pipeline is inactive; inspect the `database_connected` and `pipeline_active` fields in `/health`.
 
 ## Project Structure
 ---
@@ -46,8 +58,8 @@ multimodal-enterprise-rag-engine/
 │   │
 │   ├── ingestion/                  # MODULE 1: Data Parsing & Structural Chunking
 │   │   ├── __init__.py
-│   │   ├── pdf_parser.py           # Layout-aware PDF chunking script
-│   │   └── multimodal_parser.py    # Multimedia and Whisper transcription processors
+│   │   ├── pdf_parser.py           # PDF loading and configurable chunking
+│   │   └── multimodal_parser.py    # PyMuPDF text and table detection prototype
 │   │
 │   ├── pipeline/                   # MODULE 2: Retrieval & Cognitive Chains
 │   │   ├── __init__.py
@@ -56,13 +68,12 @@ multimodal-enterprise-rag-engine/
 │   │
 │   ├── api/                        # MODULE 3: Headless Application Delivery Gateway
 │   │   ├── __init__.py
-│   │   └── main.py                 # High-performance FastAPI gateway application
+│   │   └── main.py                 # FastAPI gateway application
 │   │
-│   └── evaluation/                 # MODULE 4: MLOps Quality Control Suite
-│       ├── golden_dataset.json     # Decoupled validation ground-truths and test cases
-│       └── optimizer.py            # RAGAS metric validation calculation suite
+│   ├── evaluation/                 # MODULE 4: RAGAS evaluation suite
+│   │   └── optimizer.py            # Configured pipeline evaluation runner            # RAGAS metric validation calculation suite
 │
-│   └── tests/                    # Unit and integration tests
+│   └── tests/                      # Unit and integration tests
 │       ├── test_api.py
 │       ├── test_database.py
 │       ├── test_evaluation.py
