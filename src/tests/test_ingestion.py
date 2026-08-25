@@ -117,6 +117,7 @@ def test_pdf_processing_outputs_correct_document_structure():
 
 
 # --- NEW: Testing Output Data Matrix Properties ---
+@pytest.mark.network
 def test_multimodal_parser_metadata_schema():
     """
     Integration Check: Processes a sample test document to ensure

@@ -37,12 +37,14 @@ def mock_pipeline(tmp_path, monkeypatch):
 
 
 # Mark tests with @pytest.mark.asyncio so pytest knows how to await them!
+@pytest.mark.network
 @pytest.mark.asyncio
 async def test_router_selects_chat_for_greetings(mock_pipeline):
     decision = await mock_pipeline.aroute_query("Good morning! How are things?")
     assert decision == "CHAT"
 
 
+@pytest.mark.network
 @pytest.mark.asyncio
 async def test_router_selects_retrieve_for_factual_queries(mock_pipeline):
     decision = await mock_pipeline.aroute_query(
@@ -51,6 +53,7 @@ async def test_router_selects_retrieve_for_factual_queries(mock_pipeline):
     assert decision == "RETRIEVE"
 
 
+@pytest.mark.network
 @pytest.mark.asyncio
 async def test_end_to_end_guarded_generation(mock_pipeline):
     result = await mock_pipeline.aexecute_pipeline("Tell me about Alpha Corp.")

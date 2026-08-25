@@ -21,12 +21,13 @@ app = FastAPI(
 
 # Initialize global application components on server boot
 
+vectorstore = None
+agent_system: Optional[AgenticRAGCore] = None
 try:
     vectorstore = initialize_vectorstore()
-    agent_system: Optional[AgenticRAGCore] = AgenticRAGCore(vectorstore=vectorstore)
+    agent_system = AgenticRAGCore(vectorstore=vectorstore)
 except Exception as e:
     print(f"⚠️ Warning during database startup hook: {e}")
-    agent_system = None
 
 
 @app.get("/health")

@@ -1,7 +1,6 @@
 # src/config.py
 import os
 import yaml
-import ollama
 
 from dotenv import load_dotenv
 
@@ -13,15 +12,9 @@ TEST_DOCUMENT_PATH = os.getenv("TEST_DOCUMENT_PATH")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
-OLLAMA_URL = os.getenv("OLLAMA_BASE_URL")
+OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
-# 2. Test the connection to Ollama with the provided configuration
-client = ollama.Client(host=OLLAMA_URL)
-response = client.generate(model=OLLAMA_MODEL, prompt="Hello, Llama!")
-print(response["response"])
-
-# 3. Parse the structural hyperparameters from the YAML configuration
+# 2. Parse the structural hyperparameters from the YAML configuration
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "configs", "config.yaml")
 with open(CONFIG_PATH, "r") as f:
     _yaml_config = yaml.safe_load(f)
