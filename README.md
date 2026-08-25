@@ -21,6 +21,26 @@ This repository is an engineering prototype for a headless RAG API. It combines 
 
 The RAGAS suite reads a saved golden dataset and evaluates the active configured pipeline. Its judge LLM and embeddings come from the selected Google or Ollama providers; local Ollama execution is optional, not the default guarantee. Default tests mock or skip provider-dependent paths. Passing mocked tests does not demonstrate the quality of a live local model.
 
+## Evaluation Results
+
+The pipeline was evaluated against a 60-question slice of the independently published [Open RAG Benchmark](https://huggingface.co/datasets/vectara/open_ragbench) dataset (`vectara/open_ragbench`), pinned to revision `63f6b052ff83508b08e242db42263ee708815c26`. This is a real external benchmark, not a self-authored test set. The slice covers 51 source PDFs and 9,510 indexed Chroma chunks, with 15 text-only, 15 text-image, 15 text-table, and 15 text-table-image questions; 44 questions are abstractive and 16 are extractive.
+
+| Metric | Score |
+| --- | ---: |
+| Faithfulness | 0.75 |
+| Answer Relevancy | 0.68 |
+| Context Precision | 0.82 |
+| Context Recall | 0.82 |
+
+Two of 240 local RAGAS judge outputs were malformed and excluded from aggregation. The context metrics use raw reranked chunk content (`doc.page_content` captured immediately after retrieval), not model-generated citation strings; this distinction ensures the metrics measure the retrieved evidence rather than the model's potentially incomplete or inaccurate rendering of it.
+
+To reproduce the evaluation:
+
+1. Run `python scripts/prepare_openrag_slice.py` to pull the pinned dataset slice and its source PDFs.
+2. Run `python scripts/build_golden_dataset.py` to convert the slice into `data/golden_dataset.json`.
+3. Run ingestion to build the vector store from the **same 51 PDFs** used by the golden dataset. Evaluating against a mismatched or unrelated vector store invalidates retrieval metrics; this mismatch occurred once during development.
+4. Run `python -m src.evaluation.optimizer`.
+
 ## Roadmap / Known Limitations
 
 This project keeps an enterprise RAG architecture as its direction, but the current implementation has important gaps:
@@ -72,8 +92,16 @@ multimodal-enterprise-rag-engine/
 │   └── config.yaml                 # System configurations and engine profiles
 │
 ├── data/
+│   ├── golden_dataset.json         # Open RAG evaluation questions and references
+│   ├── golden_dataset_mapping_report.json # Dataset conversion report
+│   ├── openrag_slice/
+│   │   └── slice_manifest.json     # Pinned Open RAG slice manifest
 │   ├── raw_docs/                   # Drop ingestion PDFs here
 │   └── vectorstore/                # Local ChromaDB persistent index layer
+│
+├── scripts/
+│   ├── build_golden_dataset.py     # Convert the benchmark slice for RAGAS
+│   └── prepare_openrag_slice.py    # Download the pinned Open RAG slice
 │
 ├── src/
 │   ├── __init__.py
@@ -104,8 +132,10 @@ multimodal-enterprise-rag-engine/
 │       ├── test_ingestion.py
 │       └── test_pipeline.py
 │
+├── .dockerignore                  # Docker build-context exclusions
 ├── .env.example                    # Environmental configuration template for secrets
 ├── Dockerfile                      # Application containerization manifest
+├── PR_DESCRIPTION.md              # Audit remediation and verification notes
 ├── pytest.ini                      # Python test configurations
 └── requirements.txt                # Fixed application runtime dependency lock
 
