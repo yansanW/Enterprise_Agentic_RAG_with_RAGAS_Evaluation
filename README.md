@@ -34,6 +34,7 @@ This project keeps an enterprise RAG architecture as its direction, but the curr
 - Async interfaces are used around the pipeline, but Chroma and SQLite are disk-backed and the system has not been load-tested. No concurrency or scale benchmark is claimed.
 - Provider-backed integration tests require an explicit opt-in and valid local/cloud credentials.
 - The API can report healthy while the RAG pipeline is inactive; inspect the `database_connected` and `pipeline_active` fields in `/health`.
+- The `/health` endpoint's `pipeline_active` field confirms that `AgenticRAGCore` was constructed successfully; it is not a full end-to-end readiness probe for Ollama, Cohere, or embedding-provider reachability.
 
 ## Retrieval Pipeline
 
@@ -138,6 +139,14 @@ docker build -t enterprise-agentic-rag .
 docker run --rm -p 8000:8000 --env-file .env enterprise-agentic-rag
 ```
 The repository intentionally does not include Docker Compose because the current prototype runs as a single application container. If you select Ollama, make its host endpoint reachable from the container and set `OLLAMA_BASE_URL` accordingly.
+
+On Linux, use Docker's host-gateway mapping so the container can reach Ollama running on the host (replace the value from `.env` for this command):
+```
+docker run --rm -p 8000:8000 --env-file .env \
+  --add-host=host.docker.internal:host-gateway \
+  -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
+  enterprise-agentic-rag
+```
 
 ### 4. Run the Headless Server Gateway
 To start the FastAPI server application locally, run:
