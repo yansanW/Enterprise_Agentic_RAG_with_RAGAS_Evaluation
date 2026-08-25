@@ -1,0 +1,817 @@
+{
+  "dataset": "vectara/open_ragbench",
+  "dataset_revision": "63f6b052ff83508b08e242db42263ee708815c26",
+  "selection": "lexicographically first queries, balanced across source_type",
+  "requested_size": 60,
+  "qa_count": 60,
+  "document_count": 51,
+  "source_type_counts": {
+    "text-image": 15,
+    "text": 15,
+    "text-table": 15,
+    "text-table-image": 15
+  },
+  "query_type_counts": {
+    "abstractive": 44,
+    "extractive": 16
+  },
+  "records": [
+    {
+      "query_id": "0035bbca-a1fd-4d96-891f-5a5d9f8f3c66",
+      "question": "In what ways do large financial institutions influence market equilibrium prices?",
+      "golden_answer": "Large financial institutions impact market equilibrium prices through their awareness of their own trading effects and possession of private information, which affects how signals are revealed and interpreted by other market participants.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2404.08757v2",
+      "section_id": 1
+    },
+    {
+      "query_id": "0037d2b2-ab5a-435a-8554-c2e7fd81b390",
+      "question": "How do sectoral productivity shocks influence overall economic output?",
+      "golden_answer": "Sectoral productivity shocks can cause nonlinear changes in overall economic output due to their interaction with substitution elasticities within production networks. This interaction can transform the network and affect how these shocks aggregate into total economic output, a process known as Domar aggregation.",
+      "query_type": "abstractive",
+      "source_type": "text",
+      "doc_id": "2404.18137v2",
+      "section_id": 0
+    },
+    {
+      "query_id": "006b56ae-7929-469b-8c12-0f5aa361ff14",
+      "question": "What is the purpose of examining the propagation of price \"shocks\" in several cities?",
+      "golden_answer": "The purpose is to estimate the order of magnitude of the diffusion constant $D$ in France.",
+      "query_type": "abstractive",
+      "source_type": "text",
+      "doc_id": "2412.14624v2",
+      "section_id": 6
+    },
+    {
+      "query_id": "00707172-75cc-498a-b86d-6cacf6917d78",
+      "question": "What dataset is used for consistent pronunciation from a single native speaker?",
+      "golden_answer": "The LJspeech dataset is used for consistent pronunciation from a single native speaker.",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2410.14997v2",
+      "section_id": 6
+    },
+    {
+      "query_id": "0081a5c8-9910-44fc-984d-2d5bf8cbcee9",
+      "question": "In which type of space do volumes dominate exponentially for large radii?",
+      "golden_answer": "Volumes dominate exponentially for large radii in hyperbolic space.",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2403.13015v2",
+      "section_id": 26
+    },
+    {
+      "query_id": "00d954d0-d8b6-40ab-9506-3d5e99ac929f",
+      "question": "In what way do $L^{2}$-spaces differ from classical function spaces like $L^{2}(\\Omega, \\mathbb{R})$?",
+      "golden_answer": "Unlike classical function spaces such as $L^{2}(\\Omega, \\mathbb{R})$, which are more flexible in terms of transformations, these specialized $L^{2}$-spaces exhibit rigidity due to their dependence on both an automorphism group and manifold-specific transformations. This distinction arises because they lack irreducible factors.",
+      "query_type": "abstractive",
+      "source_type": "text",
+      "doc_id": "2412.13914v3",
+      "section_id": 0
+    },
+    {
+      "query_id": "00e79d03-bcc8-4f18-8f51-88c4b79decc0",
+      "question": "What does the Pseudo-Power Theorem state about an omega-inaccessible cardinal with cofinality omega?",
+      "golden_answer": "The Pseudo-Power Theorem states that if $\\lambda$ is an omega-inaccessible cardinal and cf($\\lambda)=\\omega$, then pp$_{\\omega}(\\lambda) \\leq \\lambda^{\\omega}$, and if $\\lambda$ is not a fixed-point of the aleph-function, then pp$_{\\omega}(\\lambda)=\\lambda^{\\omega}$ and it is not weakly inaccessible.",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2411.11841v3",
+      "section_id": 3
+    },
+    {
+      "query_id": "00f1f703-087e-4808-b838-07c819e68335",
+      "question": "What is the correlation between the tax instrument and recovered tax shock during the Great Moderation?",
+      "golden_answer": "During the Great Moderation, the correlation between the tax instrument and recovered tax shock is estimated at $45.2\\%$ with a confidence interval of $(21.5\\%, 61.2\\%)$.",
+      "query_type": "abstractive",
+      "source_type": "text",
+      "doc_id": "2403.08753v2",
+      "section_id": 11
+    },
+    {
+      "query_id": "0103999e-e3b1-4aaa-8513-016c04344183",
+      "question": "What role do Parsimony Anomalous Gene Trees (PAGTs) play in evaluating phylogenetic trees?",
+      "golden_answer": "PAGTs are used to identify inconsistencies in phylogenetic trees under certain conditions. They help illustrate how certain tree shapes can lead to incorrect preferences by parsimony methods.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2407.02634v3",
+      "section_id": 9
+    },
+    {
+      "query_id": "01063042-ba62-4c90-8cb6-9ac5df7adb2a",
+      "question": "What are the four main concepts defined by XAI?",
+      "golden_answer": "The four main concepts defined by XAI are interpretability, explainability, trustworthiness, and causality.",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2407.07009v2",
+      "section_id": 3
+    },
+    {
+      "query_id": "010ee499-211a-4195-a32b-15ce468c3588",
+      "question": "For which data-generating process does the conditional confidence interval have a coverage frequency different from that of the conventional confidence interval?",
+      "golden_answer": "$p=(.25, .25, .25, .25, .25)^{\\prime}$",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2403.00422v2",
+      "section_id": 17
+    },
+    {
+      "query_id": "01143e90-d880-4e06-b81d-fded20cc3a4a",
+      "question": "Can the infimum in the representation of $\\psi(x)$ be attained if $\\psi(x)<\\infty$?",
+      "golden_answer": "Yes, the infimum is attained for all $x \\in X$ with $\\psi(x)<\\infty$.",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2403.06613v3",
+      "section_id": 4
+    },
+    {
+      "query_id": "01416eb6-2408-491e-a971-5647f51d7af8",
+      "question": "What are the components used to calculate WER?",
+      "golden_answer": "The components used to calculate WER are substitutions (S), deletions (D), insertions (I), and correct words (C).",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2406.13337v3",
+      "section_id": 41
+    },
+    {
+      "query_id": "01431f01-9a6b-48b9-97d4-7663fee0d513",
+      "question": "What metric quantifies consistent translation pairs among proper nouns?",
+      "golden_answer": "The Lexical Translation Consistency Ratio (LTCR) quantifies the proportion of consistent translation pairs among all proper noun translation pairs in the target document.",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2410.08143v2",
+      "section_id": 3
+    },
+    {
+      "query_id": "015f84f5-d694-4fad-bfa5-d2f3687bcd52",
+      "question": "Is the accuracy of NVILA compromised for efficiency gains?",
+      "golden_answer": "No, NVILA's efficiency is achieved without compromising accuracy; it delivers comparable or even superior accuracy across image and video benchmarks.",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2412.04468v2",
+      "section_id": 5
+    },
+    {
+      "query_id": "018c1d21-aad7-4384-96f8-b700c3c9015b",
+      "question": "How does a heatmap help in understanding peptide distribution?",
+      "golden_answer": "A heatmap visually represents the frequency and distribution of peptides across different MHC alleles, highlighting patterns and relationships that may not be immediately apparent from raw data.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2403.12117v2",
+      "section_id": 20
+    },
+    {
+      "query_id": "019b19a6-b7e4-4164-a1b1-e061efebb99d",
+      "question": "Is it possible to estimate counterfactual-free probabilities to identify LATE?",
+      "golden_answer": "Yes, it suffices to observe some proportions in treatment and control groups and estimate counterfactual-free conditional probabilities.",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2405.11284v3",
+      "section_id": 10
+    },
+    {
+      "query_id": "019e5052-ef2b-44d3-9748-8f8d0038e528",
+      "question": "What does a decrease in both Rényi entropy and BSQ indicate about spectrogram quality?",
+      "golden_answer": "A decrease in both Rényi entropy and BSQ indicates improved spectrogram quality.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2406.11917v2",
+      "section_id": 21
+    },
+    {
+      "query_id": "01b6c407-2676-43f8-82ea-3c918536bb7d",
+      "question": "What is the Nash equilibrium formula for client actions in the presence of scaling attacks?",
+      "golden_answer": "The Nash equilibrium formula is \\( c_{i}^{\\mathrm{eq}}=\\frac{N \\rho_{i}\\left(1 / \\tau+1 / \\tau_{0}\\right)}{1+\\left(\\sum_{j=1}^{N} \\rho_{j}\\right) / \\tau_{0}} \\).",
+      "query_type": "extractive",
+      "source_type": "text",
+      "doc_id": "2412.00980v2",
+      "section_id": 31
+    },
+    {
+      "query_id": "020eb8fc-894c-485e-b2d9-099a42a02552",
+      "question": "What is the purpose of the multilevel binary LR model?",
+      "golden_answer": "The multilevel binary LR model was designed to include random effects associated with items, accounting for variations among items and offering more accurate DIF estimates compared to traditional LR.",
+      "query_type": "abstractive",
+      "source_type": "text",
+      "doc_id": "2408.13702v3",
+      "section_id": 4
+    },
+    {
+      "query_id": "02205406-1428-4f9d-93f0-360c574805b7",
+      "question": "How do the concepts of Deligne's conjecture extend to quantum analogs within mathematical categories?",
+      "golden_answer": "Deligne's conjecture is extended to quantum analogs by defining ribbon categories with skein relations that deform classical relations. This involves introducing parameters like $v$ and $\\alpha$ and exploring their effects on category structures, ensuring properties like semisimplicity under specific conditions.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2402.03637v2",
+      "section_id": 3
+    },
+    {
+      "query_id": "02306a4f-fa01-4a7a-82d0-4b218874f977",
+      "question": "How does the computation time vary with prediction horizon length in robot trajectory planning?",
+      "golden_answer": "Computation time generally increases with longer prediction horizon lengths for all tested methods.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2410.20267v2",
+      "section_id": 11
+    },
+    {
+      "query_id": "0287973e-7a2b-403e-b9ab-8c0fae7e39f0",
+      "question": "What is the inversion formula used for in phylogenetics?",
+      "golden_answer": "The inversion formula is used to calculate actual branch lengths from extended lengths using inclusion-exclusion principles, allowing for computation of expected values.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2407.02634v3",
+      "section_id": 4
+    },
+    {
+      "query_id": "0287d988-d09b-4051-9118-4c8831f48390",
+      "question": "How does the performance of the Two-Stage Least Squares (TSLS) estimator compare to the Ordinary Least Squares (OLS) estimator in terms of bias and variance when estimating peer effects?",
+      "golden_answer": "The TSLS estimator generally exhibits lower bias compared to the OLS estimator. However, TSLS has higher variance, which decreases as certain parameters increase in magnitude. This suggests that while TSLS is more accurate in terms of bias, it may be less stable unless specific conditions are met.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2410.14317v2",
+      "section_id": 8
+    },
+    {
+      "query_id": "029ae88b-dc53-4f88-918b-c8478d7ef0d3",
+      "question": "Why are cyclic graphs used in studying discrete-time quantum walks?",
+      "golden_answer": "Cyclic graphs are used because they provide a structured environment to study the dynamics of discrete-time quantum walks (DTQWs). They allow researchers to explore properties like odd-even parity, physical time cones, and recurrent generation of maximally entangled states.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2410.12710v2",
+      "section_id": 2
+    },
+    {
+      "query_id": "02a2b725-e3a0-42ce-8369-a2c6e3ab8044",
+      "question": "How do various physical memory allocation policies affect page fault latency in large language models?",
+      "golden_answer": "The analysis shows that while THP allocators have similar median latencies to the buddy allocator, they significantly increase tail latency. The Utopia system with 32MB segments achieves the lowest page fault latency due to efficient hash-based allocations.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2403.04635v2",
+      "section_id": 22
+    },
+    {
+      "query_id": "02ab673a-fbd0-420a-9a18-9e3a24de8b88",
+      "question": "How are beam patterns analyzed in radio telescopes?",
+      "golden_answer": "Beam patterns are analyzed by examining how the power distribution varies with position, often visualized through contour maps that show normalized power levels at different angles and distances from the central beam.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2412.02582v2",
+      "section_id": 9
+    },
+    {
+      "query_id": "02b7db12-057d-4e26-bf4c-8000888465da",
+      "question": "Why is it important to simulate gravitational wave events using data-driven distributions for future observing runs?",
+      "golden_answer": "Simulating gravitational wave events using data-driven distributions helps estimate realistic GW localization uncertainties, optimize telescope time allocation, predict merger rates accurately, and improve strategies for detecting new electromagnetic counterparts like kilonovae during future LIGO/Virgo/KAGRA observing runs.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2411.13673v2",
+      "section_id": 13
+    },
+    {
+      "query_id": "02bcc959-051f-4595-bd71-338b7eba4f51",
+      "question": "How does the distribution of nodule sizes impact the outcomes of a virtual screening trial?",
+      "golden_answer": "The distribution affects trial outcomes by influencing detection rates and false positives/negatives. A realistic size distribution ensures that findings are applicable to real-world settings.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2404.11221v4",
+      "section_id": 19
+    },
+    {
+      "query_id": "02e11dcd-d7d5-44a7-9116-6db96345ca6a",
+      "question": "How does the piecewise polynomial approximation contribute to function smoothing?",
+      "golden_answer": "Piecewise polynomial approximation contributes by matching target functions at specific points, allowing for smooth transitions across subdomains when combined with a partition of unity, ensuring continuity and uniform error bounds.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2411.07984v2",
+      "section_id": 20
+    },
+    {
+      "query_id": "03b3fef2-3a3c-451f-82e8-5e9f617d2e6a",
+      "question": "What are the challenges in ensuring safety for autonomous robots in unknown environments?",
+      "golden_answer": "Ensuring safety for autonomous robots in unknown environments involves avoiding collisions, adhering to actuation limits, and achieving desired performance without prior knowledge of obstacles.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2410.20267v2",
+      "section_id": 1
+    },
+    {
+      "query_id": "03c61e1a-7191-4c1f-825a-a990c1f34f3d",
+      "question": "How do holidays affect electricity load in France and Germany?",
+      "golden_answer": "Holidays significantly impact electricity load, with variations observed during Easter and Christmas. The effects differ between weekday and fixed date holidays, influencing the load patterns over time.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2405.17070v2",
+      "section_id": 26
+    },
+    {
+      "query_id": "03f507da-49d9-4bc8-aed1-fad06c18f576",
+      "question": "What challenges do long-tailed distributions present in object detection tasks?",
+      "golden_answer": "Long-tailed distributions in object detection lead to poor performance for rare classes because traditional methods often focus on frequent classes, causing an imbalance that affects accuracy.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2410.11774v2",
+      "section_id": 1
+    },
+    {
+      "query_id": "0430d651-4b95-4b8e-99df-c7bdfadad756",
+      "question": "What are some key benefits of using NVIDIA's new GPU architectures like H100 for VLMs?",
+      "golden_answer": "NVIDIA's new GPU architectures like H100 support native FP8 precision which enhances both computational power and memory efficiency during model training processes such as those used by large language models (LLMs) and visual language models (VLMs). This support enables substantial improvements in processing speeds without sacrificing accuracy.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2412.04468v2",
+      "section_id": 7
+    },
+    {
+      "query_id": "04943594-f11b-42b5-9aaa-2f8891855c62",
+      "question": "Is there a significant difference between model predictions and experimental data at early healing times?",
+      "golden_answer": "Yes, there is a noticeable difference between model predictions and experimental data at early healing times.",
+      "query_type": "extractive",
+      "source_type": "text-image",
+      "doc_id": "2408.03820v2",
+      "section_id": 13
+    },
+    {
+      "query_id": "04cafba0-0c88-45e5-8174-5a185722cb3b",
+      "question": "Is there an improvement in image quality with LeqMod compared to without it in PET images?",
+      "golden_answer": "Yes",
+      "query_type": "extractive",
+      "source_type": "text-image",
+      "doc_id": "2404.17994v2",
+      "section_id": 16
+    },
+    {
+      "query_id": "04f06b6e-7ad7-431c-8353-d218d39daa85",
+      "question": "What is the impact of varying exposure surfaces on data variability in statistical models?",
+      "golden_answer": "Varying exposure surfaces increases the variability of data, as shown by wider boxplots, but does not significantly change bias.",
+      "query_type": "abstractive",
+      "source_type": "text-image",
+      "doc_id": "2403.05373v2",
+      "section_id": 26
+    },
+    {
+      "query_id": "07a949ae-ff39-490b-aed5-b0ae16ba8a7b",
+      "question": "How do diagrammatic categories contribute to understanding exotic subfactors?",
+      "golden_answer": "Diagrammatic categories provide visual tools that simplify complex mathematical concepts, making it easier to explore conjectures about semisimplifications at roots of unity. This contributes significantly to understanding exotic subfactors in mathematical physics by offering new perspectives on their interactions.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2402.03637v2",
+      "section_id": 19
+    },
+    {
+      "query_id": "081a3106-1355-42b7-ba51-ac45a47dc3ed",
+      "question": "What are the key hyperparameters used in training models for protein function prediction and PPI link prediction?",
+      "golden_answer": "The key hyperparameters include the number of epochs, number of heads, learning rate, number of layers, number of hidden units, dropout rate, and k value for SortPooling. These vary across different models and experiments.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2411.08909v3",
+      "section_id": 30
+    },
+    {
+      "query_id": "0aa05517-ed7e-432f-b97c-162f97e7b803",
+      "question": "What are typical latent dimensions used for different components in numerical experiments involving PDEs?",
+      "golden_answer": "Typical latent dimensions vary by component; for instance, a dimension of 11 is used for boundary value problems and Lotka-Volterra model trajectories, while larger dimensions like 32 are employed for steady-state diffusion coefficients and Navier Stokes equation vorticity.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2410.12036v2",
+      "section_id": 31
+    },
+    {
+      "query_id": "0ae96034-9e74-4b57-9db4-b58ba0e868c5",
+      "question": "How is the Tokyo area geographically defined in studies about educational access?",
+      "golden_answer": "The Tokyo area is typically defined as a specific region within Japan that includes several prefectures surrounding Tokyo city. This definition helps in analyzing educational access and social mobility specific to this urban center.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2402.04429v3",
+      "section_id": 23
+    },
+    {
+      "query_id": "0b4acbde-fe78-419f-930a-04d49c0630b6",
+      "question": "How does the recursive algorithm ensure that all agents receive their preferred objects in a hierarchy of monarchies and diarchies?",
+      "golden_answer": "The recursive algorithm uses supply vectors, partial allocations, and generalized mechanisms to map preferences to feasible allocations. It tracks progress through histories and applies sequencing rules to allocate objects based on priority order until all are distributed.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2401.11899v3",
+      "section_id": 15
+    },
+    {
+      "query_id": "0ba12832-6d3c-4e90-8f97-3143fc7ee88f",
+      "question": "What threshold percentage is used in the Generalized Pareto Distribution (GPD) model?",
+      "golden_answer": "The threshold percentage used in the GPD model is set at 90%.",
+      "query_type": "extractive",
+      "source_type": "text-table-image",
+      "doc_id": "2411.13384v2",
+      "section_id": 8
+    },
+    {
+      "query_id": "0c2f0d36-a9fc-46de-b776-a9a722b874d7",
+      "question": "How do ETS models assign weights to past observations?",
+      "golden_answer": "ETS models apply exponential smoothing to assign exponentially diminishing weights to past observations.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2405.17070v2",
+      "section_id": 8
+    },
+    {
+      "query_id": "0c427ab5-2efe-462d-96e9-9fdbd2c2cd28",
+      "question": "What is the significance of the classical exceptional series in knot theory?",
+      "golden_answer": "The classical exceptional series is significant in knot theory as it proposes a new framework for understanding and constructing knot polynomials. It introduces a conjectural third 1-parameter family of Lie algebra objects that could lead to a novel 2-variable knot invariant, enhancing our understanding of knots through advanced algebraic structures.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2402.03637v2",
+      "section_id": 2
+    },
+    {
+      "query_id": "0c5eeb67-8acd-48a4-8c88-c1c5faf1b2a3",
+      "question": "What year did the F-BIAS network start?",
+      "golden_answer": "2021",
+      "query_type": "extractive",
+      "source_type": "text-table",
+      "doc_id": "2409.15009v2",
+      "section_id": 3
+    },
+    {
+      "query_id": "0c97c8b6-d292-43e5-a46a-a13b2ddab860",
+      "question": "What challenges exist when using deep learning for anomaly detection in multivariate time series data?",
+      "golden_answer": "Challenges include the complexity of implementing deep learning models compared to classical methods, the lack of consistent superiority over traditional techniques across various datasets, and difficulties arising from limited availability of large multivariate datasets for comprehensive evaluation.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2411.13951v4",
+      "section_id": 3
+    },
+    {
+      "query_id": "0e153cbf-a237-4129-86ac-db0101f5fba4",
+      "question": "How do Weibull and Rayleigh distributions aid in target detection for SAR images?",
+      "golden_answer": "Weibull and Rayleigh distributions aid in target detection by providing statistical models that effectively differentiate targets from background clutter. They set adaptive thresholds based on statistical properties, enhancing the accuracy of detecting targets.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2410.03816v2",
+      "section_id": 5
+    },
+    {
+      "query_id": "0f02b37a-15dd-4422-bb1f-0d155429d81d",
+      "question": "What role does a truncation function play in managing stopping criteria for statistical tests?",
+      "golden_answer": "A truncation function helps manage stopping criteria by setting the test martingale to zero if it falls below a certain threshold, ensuring that type I error is controlled. This mechanism prevents overshooting and maintains desired error rates.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2410.16076v3",
+      "section_id": 14
+    },
+    {
+      "query_id": "0f903018-ee2a-4502-be2c-150b110aacb1",
+      "question": "Why is scalability an important factor in choosing a benchmark for assessing code understanding capabilities?",
+      "golden_answer": "Scalability is crucial because it ensures that the benchmark can handle large volumes of data efficiently without compromising accuracy or performance. This is particularly important when evaluating LLMs across various domains to ensure consistent results. Benchmarks like MCQ-based ones offer this scalability advantage over more narrowly focused assessments.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2410.01999v4",
+      "section_id": 2
+    },
+    {
+      "query_id": "0fdee04e-156e-4ec8-9a21-6df7587be10f",
+      "question": "Why might participants prefer validation tasks over training tasks in decentralized AI systems?",
+      "golden_answer": "Participants may prefer validation tasks because they offer more consistent earnings with less variability compared to the higher but uncertain rewards from training tasks.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2412.14566v2",
+      "section_id": 11
+    },
+    {
+      "query_id": "10aa08ee-fabb-4c98-9b0b-28f2d02075ff",
+      "question": "Are host samples classified more accurately than soil or aquatic ones?",
+      "golden_answer": "Yes, host samples are classified more accurately due to genomic differences and sample imbalance.",
+      "query_type": "extractive",
+      "source_type": "text-table-image",
+      "doc_id": "2405.05998v3",
+      "section_id": 3
+    },
+    {
+      "query_id": "10b60935-2122-4150-b618-b83b4779b4a5",
+      "question": "Which combination of auxiliary losses provides optimal results for modeling RNA structures?",
+      "golden_answer": "The combination of all three auxiliary losses—backbone coordinate loss ($\\mathcal{L}_{\\text {bb }}$), distance-based loss ($\\mathcal{L}_{\\text {dist }}$), and $SO(3)$ rotational alignment—provides optimal results for modeling RNA structures by ensuring high structural validity and accurate learning of geometric properties.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2406.13839v2",
+      "section_id": 20
+    },
+    {
+      "query_id": "115fdbd6-df01-4cac-b1a2-c61161c7dc7c",
+      "question": "Why is it beneficial for a channel estimation scheme to require fewer relevant subcarriers?",
+      "golden_answer": "Requiring fewer relevant subcarriers is beneficial because it reduces computational complexity and resource usage while still achieving effective signal processing, as demonstrated by the TRFI-FNN's ability to maintain BER performance with fewer subcarriers than other models.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2407.07009v2",
+      "section_id": 21
+    },
+    {
+      "query_id": "120bbf03-fa55-4a04-88ea-f02db0a48e7a",
+      "question": "How does Parametric DeepONet compare with other models like CNN and MLP in estimating system parameters?",
+      "golden_answer": "Parametric DeepONet outperforms CNN and MLP models by achieving better NRMSE scores and more consistent estimations after refinement. It excels at encoding system parameters for improved initialization, even when some states are excluded from training data.",
+      "query_type": "abstractive",
+      "source_type": "text-table-image",
+      "doc_id": "2410.11712v2",
+      "section_id": 20
+    },
+    {
+      "query_id": "124b8ce4-398a-4bf6-b4a5-c3ab3b6e540e",
+      "question": "How long does autoregressive postprocessing add to computation times?",
+      "golden_answer": "About one second",
+      "query_type": "extractive",
+      "source_type": "text-table",
+      "doc_id": "2405.17070v2",
+      "section_id": 19
+    },
+    {
+      "query_id": "134dc8b0-87cd-4d14-b21b-0428afa3df92",
+      "question": "What are some examples where switching from an oracle algorithm like OPHR to a more efficient one like GGR results in significant time savings without much loss in accuracy?",
+      "golden_answer": "In cases such as Movies-50 and Products-25, switching from an oracle algorithm like OPHR to a more efficient one like GGR results in significant time savings—hours saved—while maintaining similar levels or only slightly reduced levels (within about $1\\%$) of accuracy as measured by PHR.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2403.05821v2",
+      "section_id": 43
+    },
+    {
+      "query_id": "146bd47a-776e-4eed-a846-b4d4a7ae4c40",
+      "question": "How does supervising different numbers of non-frame atoms influence predicted model likeness such as RhoFold?",
+      "golden_answer": "Supervising more non-frame atoms results in higher likeness to predicted models like RhoFold due to improved structural realism, reflected by increased scTM scores.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2406.13839v3",
+      "section_id": 19
+    },
+    {
+      "query_id": "16fc16d5-75ac-442e-993a-44777eb38ece",
+      "question": "How do different memory window sizes affect the performance of translation models in terms of quality and consistency?",
+      "golden_answer": "The performance of translation models is influenced by the size of memory windows. Short-Term Memory window size slightly improves consistency but at a high computational cost, while Long-Term Memory window size changes offer no significant benefits due to effective context capture by the Bilingual Summary component.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2410.08143v2",
+      "section_id": 17
+    },
+    {
+      "query_id": "186ed08c-8491-4166-93b5-9d1cd1edb2cf",
+      "question": "How does the sample size and time step affect the bias and variance in estimating parameters for circular Brownian motion?",
+      "golden_answer": "For circular Brownian motion, as the sample size increases and the time step decreases, the bias of estimated parameters like $\\sigma$ remains close to zero, while the variance decreases. This indicates that larger sample sizes and smaller time steps lead to more accurate parameter estimates.",
+      "query_type": "abstractive",
+      "source_type": "text-table",
+      "doc_id": "2412.06343v3",
+      "section_id": 6
+    }
+  ],
+  "pdfs": {
+    "2401.11899v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2401.11899v3.pdf",
+      "url": "https://arxiv.org/pdf/2401.11899v3"
+    },
+    "2402.03637v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2402.03637v2.pdf",
+      "url": "https://arxiv.org/pdf/2402.03637v2"
+    },
+    "2402.04429v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2402.04429v3.pdf",
+      "url": "https://arxiv.org/pdf/2402.04429v3"
+    },
+    "2403.00422v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2403.00422v2.pdf",
+      "url": "https://arxiv.org/pdf/2403.00422v2"
+    },
+    "2403.04635v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2403.04635v2.pdf",
+      "url": "https://arxiv.org/pdf/2403.04635v2"
+    },
+    "2403.05373v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2403.05373v2.pdf",
+      "url": "https://arxiv.org/pdf/2403.05373v2"
+    },
+    "2403.05821v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2403.05821v2.pdf",
+      "url": "https://arxiv.org/pdf/2403.05821v2"
+    },
+    "2403.06613v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2403.06613v3.pdf",
+      "url": "https://arxiv.org/pdf/2403.06613v3"
+    },
+    "2403.08753v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2403.08753v2.pdf",
+      "url": "https://arxiv.org/pdf/2403.08753v2"
+    },
+    "2403.12117v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2403.12117v2.pdf",
+      "url": "https://arxiv.org/pdf/2403.12117v2"
+    },
+    "2403.13015v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2403.13015v2.pdf",
+      "url": "https://arxiv.org/pdf/2403.13015v2"
+    },
+    "2404.08757v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2404.08757v2.pdf",
+      "url": "https://arxiv.org/pdf/2404.08757v2"
+    },
+    "2404.11221v4": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2404.11221v4.pdf",
+      "url": "https://arxiv.org/pdf/2404.11221v4"
+    },
+    "2404.17994v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2404.17994v2.pdf",
+      "url": "https://arxiv.org/pdf/2404.17994v2"
+    },
+    "2404.18137v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2404.18137v2.pdf",
+      "url": "https://arxiv.org/pdf/2404.18137v2"
+    },
+    "2405.05998v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2405.05998v3.pdf",
+      "url": "https://arxiv.org/pdf/2405.05998v3"
+    },
+    "2405.11284v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2405.11284v3.pdf",
+      "url": "https://arxiv.org/pdf/2405.11284v3"
+    },
+    "2405.17070v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2405.17070v2.pdf",
+      "url": "https://arxiv.org/pdf/2405.17070v2"
+    },
+    "2406.11917v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2406.11917v2.pdf",
+      "url": "https://arxiv.org/pdf/2406.11917v2"
+    },
+    "2406.13337v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2406.13337v3.pdf",
+      "url": "https://arxiv.org/pdf/2406.13337v3"
+    },
+    "2406.13839v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2406.13839v2.pdf",
+      "url": "https://arxiv.org/pdf/2406.13839v2"
+    },
+    "2406.13839v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2406.13839v3.pdf",
+      "url": "https://arxiv.org/pdf/2406.13839v3"
+    },
+    "2407.02634v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2407.02634v3.pdf",
+      "url": "https://arxiv.org/pdf/2407.02634v3"
+    },
+    "2407.07009v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2407.07009v2.pdf",
+      "url": "https://arxiv.org/pdf/2407.07009v2"
+    },
+    "2408.03820v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2408.03820v2.pdf",
+      "url": "https://arxiv.org/pdf/2408.03820v2"
+    },
+    "2408.13702v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2408.13702v3.pdf",
+      "url": "https://arxiv.org/pdf/2408.13702v3"
+    },
+    "2409.15009v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2409.15009v2.pdf",
+      "url": "https://arxiv.org/pdf/2409.15009v2"
+    },
+    "2410.01999v4": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.01999v4.pdf",
+      "url": "https://arxiv.org/pdf/2410.01999v4"
+    },
+    "2410.03816v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.03816v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.03816v2"
+    },
+    "2410.08143v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.08143v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.08143v2"
+    },
+    "2410.11712v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.11712v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.11712v2"
+    },
+    "2410.11774v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.11774v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.11774v2"
+    },
+    "2410.12036v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.12036v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.12036v2"
+    },
+    "2410.12710v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.12710v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.12710v2"
+    },
+    "2410.14317v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.14317v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.14317v2"
+    },
+    "2410.14997v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.14997v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.14997v2"
+    },
+    "2410.16076v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.16076v3.pdf",
+      "url": "https://arxiv.org/pdf/2410.16076v3"
+    },
+    "2410.20267v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2410.20267v2.pdf",
+      "url": "https://arxiv.org/pdf/2410.20267v2"
+    },
+    "2411.07984v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2411.07984v2.pdf",
+      "url": "https://arxiv.org/pdf/2411.07984v2"
+    },
+    "2411.08909v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2411.08909v3.pdf",
+      "url": "https://arxiv.org/pdf/2411.08909v3"
+    },
+    "2411.11841v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2411.11841v3.pdf",
+      "url": "https://arxiv.org/pdf/2411.11841v3"
+    },
+    "2411.13384v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2411.13384v2.pdf",
+      "url": "https://arxiv.org/pdf/2411.13384v2"
+    },
+    "2411.13673v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2411.13673v2.pdf",
+      "url": "https://arxiv.org/pdf/2411.13673v2"
+    },
+    "2411.13951v4": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2411.13951v4.pdf",
+      "url": "https://arxiv.org/pdf/2411.13951v4"
+    },
+    "2412.00980v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2412.00980v2.pdf",
+      "url": "https://arxiv.org/pdf/2412.00980v2"
+    },
+    "2412.02582v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2412.02582v2.pdf",
+      "url": "https://arxiv.org/pdf/2412.02582v2"
+    },
+    "2412.04468v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2412.04468v2.pdf",
+      "url": "https://arxiv.org/pdf/2412.04468v2"
+    },
+    "2412.06343v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2412.06343v3.pdf",
+      "url": "https://arxiv.org/pdf/2412.06343v3"
+    },
+    "2412.13914v3": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2412.13914v3.pdf",
+      "url": "https://arxiv.org/pdf/2412.13914v3"
+    },
+    "2412.14566v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2412.14566v2.pdf",
+      "url": "https://arxiv.org/pdf/2412.14566v2"
+    },
+    "2412.14624v2": {
+      "status": "downloaded",
+      "path": "data/openrag_slice/documents/2412.14624v2.pdf",
+      "url": "https://arxiv.org/pdf/2412.14624v2"
+    }
+  }
+}

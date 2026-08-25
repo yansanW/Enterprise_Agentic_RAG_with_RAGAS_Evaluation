@@ -1,0 +1,242 @@
+[
+  {
+    "question": "In what ways do large financial institutions influence market equilibrium prices?",
+    "ground_truth": "Large financial institutions impact market equilibrium prices through their awareness of their own trading effects and possession of private information, which affects how signals are revealed and interpreted by other market participants."
+  },
+  {
+    "question": "How do sectoral productivity shocks influence overall economic output?",
+    "ground_truth": "Sectoral productivity shocks can cause nonlinear changes in overall economic output due to their interaction with substitution elasticities within production networks. This interaction can transform the network and affect how these shocks aggregate into total economic output, a process known as Domar aggregation."
+  },
+  {
+    "question": "What is the purpose of examining the propagation of price \"shocks\" in several cities?",
+    "ground_truth": "The purpose is to estimate the order of magnitude of the diffusion constant $D$ in France."
+  },
+  {
+    "question": "What dataset is used for consistent pronunciation from a single native speaker?",
+    "ground_truth": "The LJspeech dataset is used for consistent pronunciation from a single native speaker."
+  },
+  {
+    "question": "In which type of space do volumes dominate exponentially for large radii?",
+    "ground_truth": "Volumes dominate exponentially for large radii in hyperbolic space."
+  },
+  {
+    "question": "In what way do $L^{2}$-spaces differ from classical function spaces like $L^{2}(\\Omega, \\mathbb{R})$?",
+    "ground_truth": "Unlike classical function spaces such as $L^{2}(\\Omega, \\mathbb{R})$, which are more flexible in terms of transformations, these specialized $L^{2}$-spaces exhibit rigidity due to their dependence on both an automorphism group and manifold-specific transformations. This distinction arises because they lack irreducible factors."
+  },
+  {
+    "question": "What does the Pseudo-Power Theorem state about an omega-inaccessible cardinal with cofinality omega?",
+    "ground_truth": "The Pseudo-Power Theorem states that if $\\lambda$ is an omega-inaccessible cardinal and cf($\\lambda)=\\omega$, then pp$_{\\omega}(\\lambda) \\leq \\lambda^{\\omega}$, and if $\\lambda$ is not a fixed-point of the aleph-function, then pp$_{\\omega}(\\lambda)=\\lambda^{\\omega}$ and it is not weakly inaccessible."
+  },
+  {
+    "question": "What is the correlation between the tax instrument and recovered tax shock during the Great Moderation?",
+    "ground_truth": "During the Great Moderation, the correlation between the tax instrument and recovered tax shock is estimated at $45.2\\%$ with a confidence interval of $(21.5\\%, 61.2\\%)$."
+  },
+  {
+    "question": "What role do Parsimony Anomalous Gene Trees (PAGTs) play in evaluating phylogenetic trees?",
+    "ground_truth": "PAGTs are used to identify inconsistencies in phylogenetic trees under certain conditions. They help illustrate how certain tree shapes can lead to incorrect preferences by parsimony methods."
+  },
+  {
+    "question": "What are the four main concepts defined by XAI?",
+    "ground_truth": "The four main concepts defined by XAI are interpretability, explainability, trustworthiness, and causality."
+  },
+  {
+    "question": "For which data-generating process does the conditional confidence interval have a coverage frequency different from that of the conventional confidence interval?",
+    "ground_truth": "$p=(.25, .25, .25, .25, .25)^{\\prime}$"
+  },
+  {
+    "question": "Can the infimum in the representation of $\\psi(x)$ be attained if $\\psi(x)<\\infty$?",
+    "ground_truth": "Yes, the infimum is attained for all $x \\in X$ with $\\psi(x)<\\infty$."
+  },
+  {
+    "question": "What are the components used to calculate WER?",
+    "ground_truth": "The components used to calculate WER are substitutions (S), deletions (D), insertions (I), and correct words (C)."
+  },
+  {
+    "question": "What metric quantifies consistent translation pairs among proper nouns?",
+    "ground_truth": "The Lexical Translation Consistency Ratio (LTCR) quantifies the proportion of consistent translation pairs among all proper noun translation pairs in the target document."
+  },
+  {
+    "question": "Is the accuracy of NVILA compromised for efficiency gains?",
+    "ground_truth": "No, NVILA's efficiency is achieved without compromising accuracy; it delivers comparable or even superior accuracy across image and video benchmarks."
+  },
+  {
+    "question": "How does a heatmap help in understanding peptide distribution?",
+    "ground_truth": "A heatmap visually represents the frequency and distribution of peptides across different MHC alleles, highlighting patterns and relationships that may not be immediately apparent from raw data."
+  },
+  {
+    "question": "Is it possible to estimate counterfactual-free probabilities to identify LATE?",
+    "ground_truth": "Yes, it suffices to observe some proportions in treatment and control groups and estimate counterfactual-free conditional probabilities."
+  },
+  {
+    "question": "What does a decrease in both Rényi entropy and BSQ indicate about spectrogram quality?",
+    "ground_truth": "A decrease in both Rényi entropy and BSQ indicates improved spectrogram quality."
+  },
+  {
+    "question": "What is the Nash equilibrium formula for client actions in the presence of scaling attacks?",
+    "ground_truth": "The Nash equilibrium formula is \\( c_{i}^{\\mathrm{eq}}=\\frac{N \\rho_{i}\\left(1 / \\tau+1 / \\tau_{0}\\right)}{1+\\left(\\sum_{j=1}^{N} \\rho_{j}\\right) / \\tau_{0}} \\)."
+  },
+  {
+    "question": "What is the purpose of the multilevel binary LR model?",
+    "ground_truth": "The multilevel binary LR model was designed to include random effects associated with items, accounting for variations among items and offering more accurate DIF estimates compared to traditional LR."
+  },
+  {
+    "question": "How do the concepts of Deligne's conjecture extend to quantum analogs within mathematical categories?",
+    "ground_truth": "Deligne's conjecture is extended to quantum analogs by defining ribbon categories with skein relations that deform classical relations. This involves introducing parameters like $v$ and $\\alpha$ and exploring their effects on category structures, ensuring properties like semisimplicity under specific conditions."
+  },
+  {
+    "question": "How does the computation time vary with prediction horizon length in robot trajectory planning?",
+    "ground_truth": "Computation time generally increases with longer prediction horizon lengths for all tested methods."
+  },
+  {
+    "question": "What is the inversion formula used for in phylogenetics?",
+    "ground_truth": "The inversion formula is used to calculate actual branch lengths from extended lengths using inclusion-exclusion principles, allowing for computation of expected values."
+  },
+  {
+    "question": "How does the performance of the Two-Stage Least Squares (TSLS) estimator compare to the Ordinary Least Squares (OLS) estimator in terms of bias and variance when estimating peer effects?",
+    "ground_truth": "The TSLS estimator generally exhibits lower bias compared to the OLS estimator. However, TSLS has higher variance, which decreases as certain parameters increase in magnitude. This suggests that while TSLS is more accurate in terms of bias, it may be less stable unless specific conditions are met."
+  },
+  {
+    "question": "Why are cyclic graphs used in studying discrete-time quantum walks?",
+    "ground_truth": "Cyclic graphs are used because they provide a structured environment to study the dynamics of discrete-time quantum walks (DTQWs). They allow researchers to explore properties like odd-even parity, physical time cones, and recurrent generation of maximally entangled states."
+  },
+  {
+    "question": "How do various physical memory allocation policies affect page fault latency in large language models?",
+    "ground_truth": "The analysis shows that while THP allocators have similar median latencies to the buddy allocator, they significantly increase tail latency. The Utopia system with 32MB segments achieves the lowest page fault latency due to efficient hash-based allocations."
+  },
+  {
+    "question": "How are beam patterns analyzed in radio telescopes?",
+    "ground_truth": "Beam patterns are analyzed by examining how the power distribution varies with position, often visualized through contour maps that show normalized power levels at different angles and distances from the central beam."
+  },
+  {
+    "question": "Why is it important to simulate gravitational wave events using data-driven distributions for future observing runs?",
+    "ground_truth": "Simulating gravitational wave events using data-driven distributions helps estimate realistic GW localization uncertainties, optimize telescope time allocation, predict merger rates accurately, and improve strategies for detecting new electromagnetic counterparts like kilonovae during future LIGO/Virgo/KAGRA observing runs."
+  },
+  {
+    "question": "How does the distribution of nodule sizes impact the outcomes of a virtual screening trial?",
+    "ground_truth": "The distribution affects trial outcomes by influencing detection rates and false positives/negatives. A realistic size distribution ensures that findings are applicable to real-world settings."
+  },
+  {
+    "question": "How does the piecewise polynomial approximation contribute to function smoothing?",
+    "ground_truth": "Piecewise polynomial approximation contributes by matching target functions at specific points, allowing for smooth transitions across subdomains when combined with a partition of unity, ensuring continuity and uniform error bounds."
+  },
+  {
+    "question": "What are the challenges in ensuring safety for autonomous robots in unknown environments?",
+    "ground_truth": "Ensuring safety for autonomous robots in unknown environments involves avoiding collisions, adhering to actuation limits, and achieving desired performance without prior knowledge of obstacles."
+  },
+  {
+    "question": "How do holidays affect electricity load in France and Germany?",
+    "ground_truth": "Holidays significantly impact electricity load, with variations observed during Easter and Christmas. The effects differ between weekday and fixed date holidays, influencing the load patterns over time."
+  },
+  {
+    "question": "What challenges do long-tailed distributions present in object detection tasks?",
+    "ground_truth": "Long-tailed distributions in object detection lead to poor performance for rare classes because traditional methods often focus on frequent classes, causing an imbalance that affects accuracy."
+  },
+  {
+    "question": "What are some key benefits of using NVIDIA's new GPU architectures like H100 for VLMs?",
+    "ground_truth": "NVIDIA's new GPU architectures like H100 support native FP8 precision which enhances both computational power and memory efficiency during model training processes such as those used by large language models (LLMs) and visual language models (VLMs). This support enables substantial improvements in processing speeds without sacrificing accuracy."
+  },
+  {
+    "question": "Is there a significant difference between model predictions and experimental data at early healing times?",
+    "ground_truth": "Yes, there is a noticeable difference between model predictions and experimental data at early healing times."
+  },
+  {
+    "question": "Is there an improvement in image quality with LeqMod compared to without it in PET images?",
+    "ground_truth": "Yes"
+  },
+  {
+    "question": "What is the impact of varying exposure surfaces on data variability in statistical models?",
+    "ground_truth": "Varying exposure surfaces increases the variability of data, as shown by wider boxplots, but does not significantly change bias."
+  },
+  {
+    "question": "How do diagrammatic categories contribute to understanding exotic subfactors?",
+    "ground_truth": "Diagrammatic categories provide visual tools that simplify complex mathematical concepts, making it easier to explore conjectures about semisimplifications at roots of unity. This contributes significantly to understanding exotic subfactors in mathematical physics by offering new perspectives on their interactions."
+  },
+  {
+    "question": "What are the key hyperparameters used in training models for protein function prediction and PPI link prediction?",
+    "ground_truth": "The key hyperparameters include the number of epochs, number of heads, learning rate, number of layers, number of hidden units, dropout rate, and k value for SortPooling. These vary across different models and experiments."
+  },
+  {
+    "question": "What are typical latent dimensions used for different components in numerical experiments involving PDEs?",
+    "ground_truth": "Typical latent dimensions vary by component; for instance, a dimension of 11 is used for boundary value problems and Lotka-Volterra model trajectories, while larger dimensions like 32 are employed for steady-state diffusion coefficients and Navier Stokes equation vorticity."
+  },
+  {
+    "question": "How is the Tokyo area geographically defined in studies about educational access?",
+    "ground_truth": "The Tokyo area is typically defined as a specific region within Japan that includes several prefectures surrounding Tokyo city. This definition helps in analyzing educational access and social mobility specific to this urban center."
+  },
+  {
+    "question": "How does the recursive algorithm ensure that all agents receive their preferred objects in a hierarchy of monarchies and diarchies?",
+    "ground_truth": "The recursive algorithm uses supply vectors, partial allocations, and generalized mechanisms to map preferences to feasible allocations. It tracks progress through histories and applies sequencing rules to allocate objects based on priority order until all are distributed."
+  },
+  {
+    "question": "What threshold percentage is used in the Generalized Pareto Distribution (GPD) model?",
+    "ground_truth": "The threshold percentage used in the GPD model is set at 90%."
+  },
+  {
+    "question": "How do ETS models assign weights to past observations?",
+    "ground_truth": "ETS models apply exponential smoothing to assign exponentially diminishing weights to past observations."
+  },
+  {
+    "question": "What is the significance of the classical exceptional series in knot theory?",
+    "ground_truth": "The classical exceptional series is significant in knot theory as it proposes a new framework for understanding and constructing knot polynomials. It introduces a conjectural third 1-parameter family of Lie algebra objects that could lead to a novel 2-variable knot invariant, enhancing our understanding of knots through advanced algebraic structures."
+  },
+  {
+    "question": "What year did the F-BIAS network start?",
+    "ground_truth": "2021"
+  },
+  {
+    "question": "What challenges exist when using deep learning for anomaly detection in multivariate time series data?",
+    "ground_truth": "Challenges include the complexity of implementing deep learning models compared to classical methods, the lack of consistent superiority over traditional techniques across various datasets, and difficulties arising from limited availability of large multivariate datasets for comprehensive evaluation."
+  },
+  {
+    "question": "How do Weibull and Rayleigh distributions aid in target detection for SAR images?",
+    "ground_truth": "Weibull and Rayleigh distributions aid in target detection by providing statistical models that effectively differentiate targets from background clutter. They set adaptive thresholds based on statistical properties, enhancing the accuracy of detecting targets."
+  },
+  {
+    "question": "What role does a truncation function play in managing stopping criteria for statistical tests?",
+    "ground_truth": "A truncation function helps manage stopping criteria by setting the test martingale to zero if it falls below a certain threshold, ensuring that type I error is controlled. This mechanism prevents overshooting and maintains desired error rates."
+  },
+  {
+    "question": "Why is scalability an important factor in choosing a benchmark for assessing code understanding capabilities?",
+    "ground_truth": "Scalability is crucial because it ensures that the benchmark can handle large volumes of data efficiently without compromising accuracy or performance. This is particularly important when evaluating LLMs across various domains to ensure consistent results. Benchmarks like MCQ-based ones offer this scalability advantage over more narrowly focused assessments."
+  },
+  {
+    "question": "Why might participants prefer validation tasks over training tasks in decentralized AI systems?",
+    "ground_truth": "Participants may prefer validation tasks because they offer more consistent earnings with less variability compared to the higher but uncertain rewards from training tasks."
+  },
+  {
+    "question": "Are host samples classified more accurately than soil or aquatic ones?",
+    "ground_truth": "Yes, host samples are classified more accurately due to genomic differences and sample imbalance."
+  },
+  {
+    "question": "Which combination of auxiliary losses provides optimal results for modeling RNA structures?",
+    "ground_truth": "The combination of all three auxiliary losses—backbone coordinate loss ($\\mathcal{L}_{\\text {bb }}$), distance-based loss ($\\mathcal{L}_{\\text {dist }}$), and $SO(3)$ rotational alignment—provides optimal results for modeling RNA structures by ensuring high structural validity and accurate learning of geometric properties."
+  },
+  {
+    "question": "Why is it beneficial for a channel estimation scheme to require fewer relevant subcarriers?",
+    "ground_truth": "Requiring fewer relevant subcarriers is beneficial because it reduces computational complexity and resource usage while still achieving effective signal processing, as demonstrated by the TRFI-FNN's ability to maintain BER performance with fewer subcarriers than other models."
+  },
+  {
+    "question": "How does Parametric DeepONet compare with other models like CNN and MLP in estimating system parameters?",
+    "ground_truth": "Parametric DeepONet outperforms CNN and MLP models by achieving better NRMSE scores and more consistent estimations after refinement. It excels at encoding system parameters for improved initialization, even when some states are excluded from training data."
+  },
+  {
+    "question": "How long does autoregressive postprocessing add to computation times?",
+    "ground_truth": "About one second"
+  },
+  {
+    "question": "What are some examples where switching from an oracle algorithm like OPHR to a more efficient one like GGR results in significant time savings without much loss in accuracy?",
+    "ground_truth": "In cases such as Movies-50 and Products-25, switching from an oracle algorithm like OPHR to a more efficient one like GGR results in significant time savings—hours saved—while maintaining similar levels or only slightly reduced levels (within about $1\\%$) of accuracy as measured by PHR."
+  },
+  {
+    "question": "How does supervising different numbers of non-frame atoms influence predicted model likeness such as RhoFold?",
+    "ground_truth": "Supervising more non-frame atoms results in higher likeness to predicted models like RhoFold due to improved structural realism, reflected by increased scTM scores."
+  },
+  {
+    "question": "How do different memory window sizes affect the performance of translation models in terms of quality and consistency?",
+    "ground_truth": "The performance of translation models is influenced by the size of memory windows. Short-Term Memory window size slightly improves consistency but at a high computational cost, while Long-Term Memory window size changes offer no significant benefits due to effective context capture by the Bilingual Summary component."
+  },
+  {
+    "question": "How does the sample size and time step affect the bias and variance in estimating parameters for circular Brownian motion?",
+    "ground_truth": "For circular Brownian motion, as the sample size increases and the time step decreases, the bias of estimated parameters like $\\sigma$ remains close to zero, while the variance decreases. This indicates that larger sample sizes and smaller time steps lead to more accurate parameter estimates."
+  }
+]

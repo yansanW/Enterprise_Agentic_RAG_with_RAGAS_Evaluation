@@ -74,5 +74,10 @@ datasets/
 
 src/test_old/
 data/golden_dataset.json
+
 Noted_Remark/
 data/vectorstore/
+# Generated Open RAG Benchmark evaluation assets
+data/openrag_slice/
+data/golden_dataset_mapping_report.json
+data/vectorstore.before-openrag-slice/

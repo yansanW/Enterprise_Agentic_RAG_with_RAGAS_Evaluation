@@ -73,7 +73,11 @@ async def run_evaluation_suite():
         f"🏃‍♂️ Executing pipeline over {len(test_questions)} dynamic evaluation queries..."
     )
 
-    for item in test_questions:
+    query_delay = float(os.getenv("EVALUATION_QUERY_DELAY_SECONDS", "6.5"))
+
+    for item_index, item in enumerate(test_questions):
+        if item_index and query_delay > 0:
+            await asyncio.sleep(query_delay)
         q = item["question"]
         queries.append(q)
         ground_truths.append(item["ground_truth"])
