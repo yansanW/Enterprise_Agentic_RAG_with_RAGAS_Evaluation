@@ -7,10 +7,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from openai import OpenAI
 from google import genai
-from ragas.llms import llm_factory
-from ragas.embeddings import embedding_factory
-from ragas.llms import LangchainLLMWrapper
-from ragas.embeddings import LangchainEmbeddingsWrapper
 
 
 from src import config
@@ -82,6 +78,8 @@ class ModelFactory:
     @staticmethod
     def get_ragas_llm():
         """Wraps our standard pipeline LLM cleanly for Ragas judges."""
+        from ragas.llms import LangchainLLMWrapper
+
         return LangchainLLMWrapper(ModelFactory.get_llm())
         # """Instantiates native Ragas 0.4+ Judge LLM clients."""
         # if config.LLM_SOURCE == "ollama":
@@ -112,6 +110,8 @@ class ModelFactory:
 
     @staticmethod
     def get_ragas_embeddings():
+        from ragas.embeddings import LangchainEmbeddingsWrapper
+
         return LangchainEmbeddingsWrapper(ModelFactory.get_embeddings())
 
         # """
