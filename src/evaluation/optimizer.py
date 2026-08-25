@@ -85,9 +85,15 @@ async def run_evaluation_suite():
         # Invoke the active async pipeline execution path
         result = await agent_system.aexecute_pipeline(query=q, chat_history=[])
         answers.append(result.answer)
-        contexts.append(
-            result.citations if result.citations else ["No verified context retrieved."]
+        raw_context = (
+            result.retrieved_context
+            if result.retrieved_context
+            else ["No verified context retrieved."]
         )
+        contexts.append(raw_context)
+        if item_index == 0:
+            print("🔎 Example raw retrieved contexts passed to RAGAS:")
+            print(json.dumps(raw_context, indent=2, ensure_ascii=False))
 
     # 3. Restructure payload matrices into a Hugging Face Dataset format
     evaluation_dict = {

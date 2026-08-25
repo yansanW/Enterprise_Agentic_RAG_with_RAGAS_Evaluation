@@ -25,3 +25,16 @@
 
 - A clean `git archive HEAD` export contains the documented paths and passes Python bytecode compilation.
 - The host denied access to `/var/run/docker.sock`, so Docker build/run and the `/health` curl could not be completed in this environment.
+
+## Open RAG raw-context correction
+
+The 60-item Open RAG evaluation now passes the reranked documents raw `page_content` to RAGAS instead of model-generated citations. The first runtime sample was visually confirmed as full source-PDF paragraphs.
+
+| Metric | Citation contexts (buggy) | Raw retrieved contexts (fixed) |
+| --- | ---: | ---: |
+| Faithfulness | 0.3063 | 0.7516 |
+| Answer Relevancy | 0.6795 | 0.6795 |
+| Context Precision | 0.1167 | 0.8192 |
+| Context Recall | 0.4269 | 0.8220 |
+
+The corrected run had two malformed local-judge outputs out of 240 metric jobs; RAGAS omitted those values from aggregation. The context metrics are now based on retriever output rather than citation strings. Faithfulness also changed because RAGAS evaluates answer claims against contexts; Answer Relevancy remained unchanged because it does not depend on contexts.

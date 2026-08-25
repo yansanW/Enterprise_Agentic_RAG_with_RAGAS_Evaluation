@@ -122,6 +122,7 @@ class AgenticRAGCore:
         # --- ASYNCHRONOUS RETRIEVAL TRACK ---
         # Pass the optimized search_query to the retriever instead of the raw user input!
         docs = await self.retriever.ainvoke(search_query)
+        retrieved_context = [doc.page_content for doc in docs]
         context_str = "\n\n".join(
             [
                 f"[Source: {doc.metadata.get('source', 'Unknown')} | Page: {doc.metadata.get('page', 'N/A')}]\n{doc.page_content}"
@@ -156,4 +157,5 @@ class AgenticRAGCore:
         structured_response = await self.structured_generator.ainvoke(
             formatted_messages
         )
+        structured_response.attach_retrieved_context(retrieved_context)
         return structured_response

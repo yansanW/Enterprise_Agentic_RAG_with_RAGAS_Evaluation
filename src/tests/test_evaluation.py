@@ -87,6 +87,9 @@ async def test_live_evaluation_suite_execution_path():
         mock_pipeline_response = MagicMock()
         mock_pipeline_response.answer = "Mocked answer string."
         mock_pipeline_response.citations = ["Mocked citation string."]
+        mock_pipeline_response.retrieved_context = [
+            "Raw retrieved paragraph from the source PDF."
+        ]
 
         mock_agent_instance.aexecute_pipeline = AsyncMock(
             return_value=mock_pipeline_response
@@ -110,5 +113,10 @@ async def test_live_evaluation_suite_execution_path():
         try:
             scores = await run_evaluation_suite()
             assert scores is not None
+            evaluation_dataset = mock_ragas_evaluate.call_args.kwargs["dataset"]
+            assert evaluation_dataset["contexts"][0] == [
+                "Raw retrieved paragraph from the source PDF."
+            ]
+            assert "Mocked citation string." not in evaluation_dataset["contexts"][0]
         except Exception as e:
             pytest.fail(f"Live optimizer script crashed during execution loop: {e}")
