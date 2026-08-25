@@ -1,0 +1,6 @@
+[
+  {
+    "question": "What is the test fact?",
+    "ground_truth": "The test fact is fixture-backed."
+  }
+]
