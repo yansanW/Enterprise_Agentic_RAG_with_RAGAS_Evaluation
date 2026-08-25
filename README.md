@@ -6,9 +6,9 @@ This repository is an engineering prototype for a headless RAG API. It combines 
 
 ### Ingestion
 
-- `standard_text` uses `PyPDFLoader` and then the configured static or semantic splitter.
-- `multimodal_vlm` uses PyMuPDF to extract page text and detect tables. The current table content is a fixed placeholder; images are not interpreted by a vision-language model.
-- Chunks carry source, page, and text/table metadata. The implementation does not reconstruct or preserve the original spatial layout.
+- `standard_text` uses `PyPDFLoader` and then the configured static or semantic splitter. It may capture flattened table text when that text is exposed by the PDF's text layer, but it does not assign the `type: text` / `type: table` metadata used by `multimodal_vlm`.
+- `multimodal_vlm` uses PyMuPDF to extract page text and detect tables, but currently substitutes a fixed placeholder for detected table content; images are not interpreted by a vision-language model.
+- Neither path provides true visual table understanding. The implementation does not reconstruct or preserve the original spatial layout.
 
 ### Routing and generation
 
@@ -48,7 +48,7 @@ This project keeps an enterprise RAG architecture as its direction, but the curr
 - No authentication, authorization, rate limiting, telemetry, database migrations, or production operations tooling.
 - No VLM integration, image understanding, chart-accuracy measurement, audio ingestion, or Whisper transcription. Those are roadmap items.
 - Table detection exists, but table transcription is currently placeholder content.
-- Source/page/type metadata survives ingestion; spatial relationships and visual layout do not.
+- Source/page metadata survives ingestion; `type` metadata is added only by `multimodal_vlm`. Spatial relationships and visual layout do not survive.
 - Structured output constrains shape only. Citation validation and independent fact verification remain future work.
 - `CHAT` is an intentional canned-response bypass rather than open-ended conversation.
 - Async interfaces are used around the pipeline, but Chroma and SQLite are disk-backed and the system has not been load-tested. No concurrency or scale benchmark is claimed.
@@ -195,8 +195,8 @@ Provider-backed tests are opt-in and require deliberate test credentials/service
 python -m pytest --run-network
 ```
 
-### 6. Execute Offline Optimization RAGAS Evaluations
-To evaluate pipeline performance against the offline golden dataset questions, execute:
+### 6. Run RAGAS Evaluation
+Local LLM judging is supported through Ollama, but retrieval in the current pipeline still requires a live Cohere API call. To evaluate pipeline performance against the golden dataset questions, execute:
 ```
 python -m src.evaluation.optimizer
 ```
