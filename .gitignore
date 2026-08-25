@@ -74,6 +74,7 @@ datasets/
 
 src/test_old/
 data/golden_dataset.json
+data/vectorstore/
 
 Noted_Remark/
 data/vectorstore/
