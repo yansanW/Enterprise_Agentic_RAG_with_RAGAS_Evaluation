@@ -24,8 +24,9 @@ ingestion:
 
 vectorstore:
   type: "chroma"  # Options: "chroma", "pinecone", "weaviate", etc.
-  data_dir: "data"  # Used for Chroma
+  # data_dir: "data"  # Used for Chroma
   persist_directory: "vectorstore"  # Used for Chroma
+  test_document_path: "data/openrag_slice/documents/2401.11899v3.pdf"  # Path to the test documents for ingestion
 
 retrieval:
   search_type: "mmr"          # Options: "similarity" or "mmr-Maximum Marginal Relevance"

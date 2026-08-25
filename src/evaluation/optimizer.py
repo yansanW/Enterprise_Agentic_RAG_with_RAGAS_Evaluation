@@ -47,7 +47,7 @@ async def run_evaluation_suite():
         test_questions = json.load(f)
 
     # Boot up pipeline engine blocks
-    vectorstore = initialize_vectorstore()
+    vectorstore = initialize_vectorstore(persist_directory=config.DATA_DIR_Vectorstore)
     agent_system = AgenticRAGCore(vectorstore=vectorstore)
 
     # --- UNIFIED FACTORY INJECTION ---

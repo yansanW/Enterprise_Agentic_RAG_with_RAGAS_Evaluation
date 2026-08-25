@@ -61,10 +61,13 @@ _SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(_SRC_DIR)
 
 # 3. Explicitly define the absolute path to your data/ directory
-DATA_DIR = os.path.join(BASE_DIR, _yaml_config["vectorstore"]["data_dir"])
+DATA_DIR = os.path.join(BASE_DIR, "data")
+DATA_DIR_Vectorstore = os.path.join(DATA_DIR, _yaml_config["vectorstore"]["persist_directory"])
+DATA_DIR_Vectorstore_test = os.path.join(BASE_DIR, _yaml_config["vectorstore"]["test_document_path"])  # Ensure it's an absolute path
 
 # Ensure the data directories physically exist on the machine automatically
-os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(DATA_DIR_Vectorstore, exist_ok=True)
+print(f"✅ Data directory verified at: {DATA_DIR_Vectorstore}")
 
 golden_dataset_path = _yaml_config["evaluation"]["golden_ragas_dataset_path"]
 GOLDEN_DATASET_PATH = os.path.join(BASE_DIR, golden_dataset_path)

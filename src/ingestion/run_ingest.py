@@ -16,7 +16,7 @@ def run_pipeline_ingestion():
     Offline Database Hydration Loop. 
     Converts target documents into semantic vector math and populates the local disk vault.
     """
-    target_file = config.TEST_DOCUMENT_PATH
+    target_file = config.DATA_DIR_Vectorstore_test
     
     if not os.path.exists(target_file):
         logger.error(f"❌ Target document missing at {target_file}. Please check your path configurations.")
@@ -47,11 +47,13 @@ def run_pipeline_ingestion():
     
     # Pass your split chunks directly to initialize_vectorstore() to trigger the seeding block!
     # 3. Commit to database
-    vectorstore = initialize_vectorstore(chunks=chunks)
+    vectorstore = initialize_vectorstore(chunks=chunks,
+                                         persist_directory=os.path.join(config.BASE_DIR, "data/vectorstore_test"))
     
     logger.info("=======================================================")
     logger.info("✅ ENTERPRISE VECTOR VAULT HYDRATION COMPLETE on %s", current_time_str)
-    logger.info(f"   Storage Location: {os.path.join(config.DATA_DIR, 'vectorstore')}")
+    logger.info(f"   Test Document Path: {target_file}")
+    logger.info(f"   Storage Location: {os.path.join(config.BASE_DIR, "data/vectorstore_test")}")
     logger.info(f"   Total Active Records Added: {len(chunks)}")
     logger.info("=======================================================")
 

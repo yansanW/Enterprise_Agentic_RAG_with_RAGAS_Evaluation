@@ -36,6 +36,7 @@ def initialize_vectorstore(chunks=None, persist_directory: Optional[str] = None)
     # Define a clean persistence storage index folder inside your data directory
     if persist_directory is None:
         persist_directory = os.path.join(config.DATA_DIR, "vectorstore")
+        print(f"⚠️ No persist_directory provided. Defaulting to: {persist_directory}")
 
     if chunks:
         print(

@@ -76,6 +76,7 @@ src/test_old/
 data/golden_dataset.json
 data/golden_dataset_1.json
 data/vectorstore/
+data/vectorstore_test/
 
 Noted_Remark/
 data/vectorstore/
