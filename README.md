@@ -35,6 +35,29 @@ This project keeps an enterprise RAG architecture as its direction, but the curr
 - Provider-backed integration tests require an explicit opt-in and valid local/cloud credentials.
 - The API can report healthy while the RAG pipeline is inactive; inspect the `database_connected` and `pipeline_active` fields in `/health`.
 
+## Retrieval Pipeline
+
+For `RETRIEVE` requests, `AgenticRAGCore` runs this sequence:
+
+1. Chroma performs the configured base search. The checked-in configuration uses Maximum Marginal Relevance (MMR), fetching `fetch_k: 20` candidates and returning `base_k: 10` candidates.
+2. `CohereRerank` scores that candidate set with `rerank-v3.5` and keeps `rerank_top_n: 3` chunks.
+3. The selected LLM receives those chunks as context and returns the structured answer.
+
+The values live under `retrieval` in `configs/config.yaml`. MMR diversifies the initial result pool; Cohere reranking is a separate hosted API call and always requires `COHERE_API_KEY` for the current pipeline. Set `search_type: similarity` to use similarity search instead of MMR. There is currently no no-reranker mode.
+
+## Provider Matrix
+
+LLM and embedding providers are selected independently through `provider.llm_source` and `provider.embedding_source` in `configs/config.yaml`; all four combinations are accepted by the factory.
+
+| LLM | Embeddings | Required runtime configuration |
+| --- | --- | --- |
+| Google | Google | `GOOGLE_API_KEY`, plus `COHERE_API_KEY` for retrieval |
+| Google | Ollama | `GOOGLE_API_KEY`, `OLLAMA_BASE_URL`, a running Ollama embedding model, and `COHERE_API_KEY` |
+| Ollama | Google | `OLLAMA_BASE_URL`, a running Ollama chat model, `GOOGLE_API_KEY`, and `COHERE_API_KEY` |
+| Ollama | Ollama | `OLLAMA_BASE_URL`, running Ollama chat and embedding models, and `COHERE_API_KEY` |
+
+Model names are configured under `models` in `configs/config.yaml`: `google_llm`, `google_embedding`, `ollama_llm`, and `ollama_embedding`. Google credentials are needed whenever either selected provider is Google. Ollama defaults to `http://localhost:11434`; the configured models must already be pulled on that server. Evaluation uses the same provider selections rather than forcing a local backend.
+
 ## Project Structure
 ---
 
@@ -71,7 +94,7 @@ multimodal-enterprise-rag-engine/
 │   │   └── main.py                 # FastAPI gateway application
 │   │
 │   ├── evaluation/                 # MODULE 4: RAGAS evaluation suite
-│   │   └── optimizer.py            # Configured pipeline evaluation runner            # RAGAS metric validation calculation suite
+│   │   └── optimizer.py            # Configured pipeline evaluation runner
 │
 │   └── tests/                      # Unit and integration tests
 │       ├── test_api.py
@@ -100,7 +123,7 @@ Create a .env file in the project root directory using the template provided:
 ```
 cp .env.example .env
 ```
-Populate your local ```.env``` with your API credentials (ensure ```.env``` is never committed to source control).
+Populate your local ```.env``` for the provider combination above. `COHERE_API_KEY` is required by every retrieval configuration. Keep `.env` out of source control.
 
 ### 3.a. Install Dependencies
 Ensure your virtual environment is active (Python 3.12 recommended):
@@ -123,7 +146,17 @@ uvicorn src.api.main:app --reload
 ```
 Once initialized, navigate to ```http://127.0.0.1:8000/docs``` in your web browser to interact with the application via Swagger UI.
 
-### 5. Execute Offline Optimization RAGAS Evaluations
+### 5. Run Tests
+The default suite does not contact model providers:
+```
+python -m pytest
+```
+Provider-backed tests are opt-in and require deliberate test credentials/services:
+```
+python -m pytest --run-network
+```
+
+### 6. Execute Offline Optimization RAGAS Evaluations
 To evaluate pipeline performance against the offline golden dataset questions, execute:
 ```
 python -m src.evaluation.optimizer
