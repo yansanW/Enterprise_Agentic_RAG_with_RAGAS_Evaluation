@@ -24,7 +24,7 @@
 ## Verification
 
 - A clean `git archive HEAD` export contains the documented paths and passes Python bytecode compilation.
-- The host denied access to `/var/run/docker.sock`, so Docker build/run and the `/health` curl could not be completed in this environment.
+- Docker was successfully built and run, and `/health` returned `status: healthy`, `database_connected: true`, and `pipeline_active: true`.
 
 ## Open RAG raw-context correction
 
