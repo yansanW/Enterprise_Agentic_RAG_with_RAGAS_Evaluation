@@ -1,0 +1,38 @@
+{
+  "artifact_schema_version": 1,
+  "artifact_kind": "legacy_aggregate_reference",
+  "run_timestamp": null,
+  "documented_at": "2026-08-25T19:36:34+09:00",
+  "dataset_slice": {
+    "manifest_path": "data/openrag_slice/slice_manifest.json",
+    "manifest_sha256": "4bc2c4eb701a103ae03981c1177f9b325bd13a359b39708cef050006af2ddcd5",
+    "dataset": "vectara/open_ragbench",
+    "dataset_revision": "63f6b052ff83508b08e242db42263ee708815c26",
+    "selection": "lexicographically first queries, balanced across source_type",
+    "qa_count": 60,
+    "document_count": 51
+  },
+  "vectorstore_state": {
+    "indexed_chunks_reported_for_run": 9510,
+    "current_state": "not revalidated or reused for this artifact",
+    "note": "A later unrelated test ingestion reportedly added five contaminating chunks; no evaluation rerun was performed while cleanliness was uncertain."
+  },
+  "per_question_results": null,
+  "per_question_results_note": "The original row-level RAGAS result container was not retained. Per-question scores cannot be reconstructed from the documented aggregates and are intentionally not fabricated. Timestamped artifacts created by the updated optimizer include these rows.",
+  "aggregate_summary": [
+    {"metric": "faithfulness", "score": 0.7516},
+    {"metric": "answer_relevancy", "score": 0.6795},
+    {"metric": "context_precision", "score": 0.8192},
+    {"metric": "context_recall", "score": 0.8220}
+  ],
+  "excluded_or_malformed_judge_outputs": {
+    "count": 2,
+    "total_metric_jobs": 240,
+    "records": null,
+    "reason": "The contemporaneous notes identify two malformed local-judge outputs omitted by RAGAS, but do not identify their questions, metrics, or parser errors."
+  },
+  "provenance": {
+    "aggregate_source": "PR_DESCRIPTION.md, Open RAG raw-context correction table",
+    "readme_display_rounding": "two decimal places"
+  }
+}

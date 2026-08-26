@@ -1,37 +1,51 @@
 # Module 3: Headless FastAPI Gateway Layer
 
 ## Overview
-The API module serves as the primary ingress point and interface layer for the Multimodal Enterprise RAG Engine. Built using FastAPI, this headless routing infrastructure exposes high-performance web endpoints that orchestrate data state lookups, session history compilation, and async model pipeline execution in a fully non-blocking I/O runtime environment.
+
+The API module exposes the RAG pipeline through FastAPI. Its asynchronous endpoint awaits pipeline execution and maintains session history in a disk-backed SQLite database. The repository does not include load or concurrency benchmarks, and some underlying storage operations are synchronous disk I/O.
 
 ---
 
 ## Architectural Design Patterns
 
-### 1. The Headless API Gateway Pattern
-This module completely separates user-interface management from back-end business logic. By exposing standardized, strict JSON REST interfaces instead of rendering HTML directly, the backend can power a web application, a mobile interface, or background corporate automation streams seamlessly.
+### 1. Headless API Gateway
+
+The module separates user-interface concerns from backend orchestration. Its JSON REST interface can be consumed by web, mobile, or automation clients.
 
 ### 2. Session-Isolated Stateful Memory Tracking
-Unlike standard stateless text generation endpoints, the `/api/v1/query` router manages conversational state across multiple turns automatically:
-* **Identification:** Every client request carries a unique `session_id` string token.
-* **Retrieval Phase:** On API invocation, the route fetches past message history arrays matching that specific session token from an isolated relational database on disk.
-* **Persist Phase:** After the core AI pipeline successfully generates a verified, structured answer, the endpoint appends the raw user query and the structured output back to the database file before returning the JSON object to the client.
 
-### 3. Automatic Serialization & Structural Contracts
-The system utilizes Pydantic validation barriers to handle data typing gracefully:
-* **Request Contract (`QueryRequest`):** Enforces incoming body parameters down to exact field names and defaults.
-* **Response Contract (`GuardedAnswerSchema`):** Converts the pipeline's structured model outputs directly into uniform JSON objects. If an internal component drifts or outputs malformed text strings, the Pydantic boundary intercepts it, logs a type violation, and prevents broken data formatting from reaching the client.
+The `/api/v1/query` route tracks conversation history by `session_id`:
+
+- **Identification:** Each request contains a session identifier.
+- **Retrieval:** The route reads matching history from the disk-backed SQLite store.
+- **Persistence:** After the pipeline returns a schema-conforming generated answer, the route stores the query and output before responding.
+
+The stored answer is model-generated. Schema validation does not independently verify its factual content or citations.
+
+### 3. Serialization and Structural Contracts
+
+Pydantic validates request and response structure:
+
+- **Request contract (`QueryRequest`):** Enforces the accepted fields, types, and defaults.
+- **Response contract (`GuardedAnswerSchema`):** Enforces the output fields and their types. This is structural validation rather than fact-checking.
 
 ---
 
 ## Endpoint Specifications
 
-### 1. System Health Probe
-* **Route:** `GET /health`
-* **Purpose:** Sub-second deployment check for load balancers and container orchestrators (e.g., Kubernetes, Docker).
-* **Sample Response:**
+### System Health Probe
+
+- **Route:** `GET /health`
+- **Purpose:** Reports whether the database and pipeline objects were constructed.
+- **Limitation:** Startup failures can be caught while the endpoint still returns HTTP success. Its flags do not perform an end-to-end request or verify Ollama, Cohere, embedding-provider, or generation readiness. The endpoint can therefore report success while the pipeline is inactive and should not be treated as a sufficient load-balancer readiness check.
+- **Sample response:**
+
   ```json
   {
     "status": "healthy",
     "database_connected": true,
     "pipeline_active": true
   }
+  ```
+
+Consumers should inspect the component flags and use a separate end-to-end readiness check when deployment traffic must depend on provider availability.

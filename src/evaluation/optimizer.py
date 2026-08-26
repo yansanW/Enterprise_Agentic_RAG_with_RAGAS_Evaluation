@@ -1,6 +1,10 @@
 # src/evaluation/optimizer.py
 import os
 import sys
+import hashlib
+import math
+from datetime import datetime, timezone
+from pathlib import Path
 from types import ModuleType
 
 # --- CRITICAL RUNTIME GUARD: MOCK LEGACY LANGCHAIN ROUTE ---
@@ -27,11 +31,103 @@ from src.pipeline import AgenticRAGCore
 from src import config
 
 
+METRIC_NAMES = (
+    "faithfulness",
+    "answer_relevancy",
+    "answer_relevance",
+    "context_precision",
+    "context_recall",
+)
+
+
+def _json_safe(value):
+    """Convert pandas/numpy values into strict JSON-compatible values."""
+    if value is None:
+        return None
+    if hasattr(value, "item"):
+        value = value.item()
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    if isinstance(value, (str, int, float, bool)):
+        return value
+    if isinstance(value, dict):
+        return {str(key): _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    return str(value)
+
+
+def _manifest_identity():
+    manifest_path = Path(config.DATA_DIR) / "openrag_slice" / "slice_manifest.json"
+    if not manifest_path.exists():
+        return {
+            "manifest_path": str(manifest_path.relative_to(config.BASE_DIR)),
+            "manifest_sha256": None,
+            "dataset_revision": None,
+        }
+
+    manifest_bytes = manifest_path.read_bytes()
+    manifest = json.loads(manifest_bytes)
+    return {
+        "manifest_path": str(manifest_path.relative_to(config.BASE_DIR)),
+        "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+        "dataset": manifest.get("dataset"),
+        "dataset_revision": manifest.get("dataset_revision"),
+        "selection": manifest.get("selection"),
+        "qa_count": manifest.get("qa_count"),
+    }
+
+
+def _save_results(score_results, aggregate_scores, run_timestamp):
+    """Persist row-level RAGAS results and provenance after a completed run."""
+    result_frame = score_results.to_pandas()
+    per_question = [_json_safe(row) for row in result_frame.to_dict(orient="records")]
+
+    excluded_outputs = []
+    for question_index, row in enumerate(per_question):
+        for metric_name in METRIC_NAMES:
+            if metric_name in row and row[metric_name] is None:
+                excluded_outputs.append(
+                    {
+                        "question_index": question_index,
+                        "metric": metric_name,
+                        "reason": "RAGAS returned a missing or non-finite score; no more specific judge reason was available.",
+                    }
+                )
+
+    artifact = {
+        "artifact_schema_version": 1,
+        "run_timestamp": run_timestamp.isoformat(),
+        "dataset_slice": _manifest_identity(),
+        "per_question_results": per_question,
+        "aggregate_summary": [
+            {"metric": name, "score": _json_safe(score)}
+            for name, score in aggregate_scores.items()
+        ],
+        "excluded_or_malformed_judge_outputs": {
+            "count": len(excluded_outputs),
+            "records": excluded_outputs,
+        },
+    }
+
+    output_dir = Path(config.DATA_DIR) / "eval_results"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    timestamp_slug = run_timestamp.strftime("%Y%m%dT%H%M%SZ")
+    output_path = output_dir / f"openrag_slice_60_{timestamp_slug}.json"
+    output_path.write_text(
+        json.dumps(artifact, indent=2, ensure_ascii=False, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    print(f"💾 Full evaluation results saved to {output_path}")
+    return output_path
+
+
 async def run_evaluation_suite():
     """
     Offline Optimization Suite. Reads evaluation metrics dynamically from disk
     and executes RAGAS alignment matrices over the active engine pipeline.
     """
+    run_timestamp = datetime.now(timezone.utc)
     print("🧪 Initializing Evaluation Pipeline Components...")
 
     # 1. Resolve localized dataset file path strings
@@ -123,6 +219,7 @@ async def run_evaluation_suite():
     print("=======================================================")
     # Using .to_pandas().to_dict(orient="records") or iterating over scores:
     # If scores is a list of dictionaries, we can consolidate or iterate them safely:
+    final_scores_dict = {}
     try:
         # Convert the evaluation result directly into a clean flat dictionary
         final_scores_dict = score_results.to_pandas().mean(numeric_only=True).to_dict()
@@ -134,6 +231,7 @@ async def run_evaluation_suite():
         # Fallback tracking if pandas operations are restricted in your environment
         print(f"📊 Raw Evaluation Scores Result Container: {score_results.scores}")
     print("=======================================================\n")
+    _save_results(score_results, final_scores_dict, run_timestamp)
     return score_results
 
 

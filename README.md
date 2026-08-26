@@ -32,7 +32,9 @@ The pipeline was evaluated against a 60-question slice of the independently publ
 | Context Precision | 0.82 |
 | Context Recall | 0.82 |
 
-Two of 240 local RAGAS judge outputs were malformed and excluded from aggregation. The context metrics use raw reranked chunk content (`doc.page_content` captured immediately after retrieval), not model-generated citation strings; this distinction ensures the metrics measure the retrieved evidence rather than the model's potentially incomplete or inaccurate rendering of it.
+The exact observed aggregates and their provenance are recorded in [`data/eval_results/openrag_slice_60_reference.json`](data/eval_results/openrag_slice_60_reference.json). This legacy run was documented on 2026-08-25 with 9,510 indexed chunks. Its original row-level RAGAS output and exact execution timestamp were not retained, so the reference artifact marks those fields unavailable rather than reconstructing them. The current vector-store state was not used to regenerate the results because it has not been confirmed clean following a reported five-chunk test-ingestion contamination.
+
+Two of 240 local RAGAS judge outputs were malformed and excluded from aggregation. The context metrics use raw reranked chunk content (`doc.page_content` captured immediately after retrieval), not model-generated citation strings; this distinction ensures the metrics measure the retrieved evidence rather than the model's potentially incomplete or inaccurate rendering of it. New runs save timestamped JSON artifacts containing the slice-manifest revision and SHA-256, per-question RAGAS rows, aggregate scores, and detectable missing/non-finite judge outputs.
 
 To reproduce the evaluation:
 
@@ -94,6 +96,8 @@ multimodal-enterprise-rag-engine/
 ├── data/
 │   ├── golden_dataset.json         # Open RAG evaluation questions and references
 │   ├── golden_dataset_mapping_report.json # Dataset conversion report
+│   ├── eval_results/
+│   │   └── openrag_slice_60_reference.json # Preserved legacy benchmark aggregates
 │   ├── openrag_slice/
 │   │   └── slice_manifest.json     # Pinned Open RAG slice manifest
 │   ├── raw_docs/                   # Drop ingestion PDFs here
