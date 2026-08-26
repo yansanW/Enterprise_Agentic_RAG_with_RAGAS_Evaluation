@@ -83,4 +83,7 @@ data/vectorstore/
 # Generated Open RAG Benchmark evaluation assets
 data/openrag_slice/
 data/golden_dataset_mapping_report.json
+# Evaluation rerun artifacts are noisy; retain only the curated reference run.
+data/eval_results/*.json
+!data/eval_results/openrag_slice_60_reference.json
 data/vectorstore.before-openrag-slice/
