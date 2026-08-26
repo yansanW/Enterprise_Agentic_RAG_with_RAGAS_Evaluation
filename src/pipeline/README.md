@@ -1,38 +1,52 @@
-# Module 2: Agentic Routing Core & Guardrail Pipeline
+# Module 2: Agentic Routing Core and Structured Pipeline
 
 ## Overview
-The Pipeline module serves as the cognitive orchestration layer of the RAG engine. Instead of passing user queries blindly to vector storage indices, this component implements an intelligent triage node to determine the optimal execution track, resolves context across multi-turn chats, and enforces strict structural integrity on the generation output.
+
+The pipeline module routes queries, reformulates retrieval queries using chat history, retrieves context, and asks the configured model for a schema-conforming response. Pydantic enforces the response structure; it does not independently establish whether model-generated claims or citations are correct.
 
 ---
 
 ## Architectural Design Patterns
 
-### 1. The Agentic Router Pattern
-To optimize processing latency and save token overhead, `chains.py` implements a predictable routing gatekeeper using low-temperature models:
-* **Conversational Track (`CHAT`):** Casual inputs, greetings, and platform system prompts bypass the database entirely, returning immediate lightweight responses.
-* **Knowledge Retrieval Track (`RETRIEVE`):** Technical queries, data metric requests, and document lookups are dynamically routed to query the vector store index.
+### 1. Agentic Router
 
-### 2. Conversational Query Reformulation Node
-To resolve pronoun drift in multi-turn conversations (e.g., a user asking *"When was it founded?"* after discussing *"Alpha Corp"*), the pipeline intercepts the `RETRIEVE` track. It evaluates past message history strings and rewrites vague queries into standalone, detailed search queries optimized for vector database lookup precision before touching disk storage.
+`chains.py` uses a model to select an execution track:
 
-### 3. Deterministic Output Guardrails (Structural Modeling)
-To eliminate raw text drift and mitigate model hallucinations, we decouple the generation payload from standard text streams:
-* **Pydantic Schema Tracking:** We bind a strict data schema interface (`GuardedAnswerSchema`) directly to the LLM decoding layer. 
-* **Factual Verification Constraints:** The model is forced to explicitly evaluate its own context coverage (`is_supported_by_context`) and isolate exact verification strings (`citations`), ensuring that the final output functions as a predictable, structured data object.
+- **Conversational track (`CHAT`):** Greetings and similar inputs bypass retrieval and receive the configured canned response.
+- **Knowledge retrieval track (`RETRIEVE`):** Factual and document-oriented queries proceed to vector retrieval and generation.
+
+Routing is model-generated and may vary with the configured provider and model.
+
+### 2. Conversational Query Reformulation
+
+For the `RETRIEVE` track, the pipeline uses message history to rewrite contextual queries into standalone retrieval queries before accessing the vector store.
+
+### 3. Structured Output Validation
+
+`GuardedAnswerSchema` uses Pydantic to enforce the presence and types of `answer`, `is_supported_by_context`, and `citations`. This ensures schema conformance only. The support flag and citation content remain model-generated and prompt-directed; no deterministic post-generation validator checks their factual support, citation accuracy, or hallucinations.
 
 ---
 
-## Technical Justifications
+## Technical Behavior
 
 ### Asynchronous Pipeline Execution
-The pipeline exposes asynchronous methods (`aroute_query`, `aexecute_pipeline`) to handle retrieval and generation loops natively. This ensures that I/O operations (like database lookups and model calls) do not block Python's main event thread, allowing the architecture to handle concurrent traffic seamlessly when exposed via a web API.
 
-### Structural Schema Enforcement vs. Raw Text Streaming
-In a production headless architecture, receiving conversational paragraphs like *"Based on the documents, I think..."* breaks backend parsing models. Forcing the model to speak natively in verified JSON schemas ensures absolute system stability and enables automated pipeline routing.
+The pipeline exposes asynchronous methods (`aroute_query`, `aexecute_pipeline`) so provider and retrieval operations can be awaited by callers. This does not imply that every underlying operation is non-blocking: Chroma and session history use disk-backed storage, and the project has no concurrency or load benchmark.
+
+### Schema-Conforming Responses
+
+Structured model output gives API consumers a consistent set of typed fields. It prevents malformed response shapes when validation succeeds, but it is not independent factual verification and does not establish citation correctness.
+
+---
+
+## Tooling
+
+- **`src/inspect_db.py`:** Inspects the configured Chroma store and reports chunk count, unique sources, ingestion timestamps, parser strategies, and a sample snippet. Run with `python -m src.inspect_db`.
 
 ---
 
 ## Testing & Mock Isolation
-The routing chains, query rewriting mechanics, and data schemas are continuously verified using automated unit and integration tests inside `tests/test_pipeline.py`. 
 
-By leveraging isolated temporary directory allocations (`tmp_path`) and `monkeypatch` overrides for external APIs, the suite validates state decision trees and async flows without requiring active outbound cloud tokens or local tensor weight loading during testing cycles.
+Tests in `src/tests/test_pipeline.py` cover provider-backed routing and generation paths, with retrieval behavior partially isolated through mocks and a temporary vector store. These tests are marked `network` and are skipped by the default suite.
+
+Run `python -m pytest --run-network` with the required configured live services to exercise those paths. Even with the opt-in, the tests validate their stated routing and output-shape assertions; they do not independently verify generated factual or citation content.
