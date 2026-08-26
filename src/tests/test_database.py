@@ -3,6 +3,10 @@ from langchain_core.documents import Document
 from src.database import initialize_vectorstore, get_session_history
 
 
+import pytest
+
+
+@pytest.mark.network
 def test_vectorstore_initialization_with_sample_chunks(tmp_path):
     """
     Integration Test: Verifies that passing mock document chunks successfully

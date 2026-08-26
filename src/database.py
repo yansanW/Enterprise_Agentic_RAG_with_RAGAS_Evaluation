@@ -14,23 +14,14 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_community.chat_message_histories import (
     SQLChatMessageHistory,
 )  # High-performance SQL history tracker
+from src.factory import ModelFactory
 from src import config
 
 
 def _get_embedding_client():
     """Internal helper to initialize the embedding model dictated by configurations."""
-    if config.EMBEDDING_SOURCE == "google":
-        return GoogleGenerativeAIEmbeddings(
-            model=config.GOOGLE_EMBEDDING, google_api_key=config.GOOGLE_API_KEY
-        )
-    elif config.EMBEDDING_SOURCE == "ollama":
-        return OllamaEmbeddings(
-            model=config.OLLAMA_EMBEDDING, base_url=config.OLLAMA_URL
-        )
-    else:
-        raise ValueError(
-            f"Unsupported embedding source configuration: {config.EMBEDDING_SOURCE}"
-        )
+    return ModelFactory.get_embeddings()
+
 
 
 def initialize_vectorstore(chunks=None, persist_directory: Optional[str] = None):
@@ -45,6 +36,7 @@ def initialize_vectorstore(chunks=None, persist_directory: Optional[str] = None)
     # Define a clean persistence storage index folder inside your data directory
     if persist_directory is None:
         persist_directory = os.path.join(config.DATA_DIR, "vectorstore")
+        print(f"⚠️ No persist_directory provided. Defaulting to: {persist_directory}")
 
     if chunks:
         print(

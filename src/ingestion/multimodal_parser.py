@@ -42,7 +42,7 @@ class MultimodalParser:
             # 2. Extract standard clear text sections normally
             text_content = page.get_text("text").strip()
 
-            if tables:
+            if tables.tables:
                 print(
                     f" Found {len(tables.tables)} structural tables on Page {page_num + 1}"
                 )

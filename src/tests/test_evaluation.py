@@ -9,6 +9,11 @@ from unittest.mock import patch, MagicMock, AsyncMock
 from src.evaluation import run_evaluation_suite
 
 
+FIXTURE_DATASET_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "fixtures", "golden_dataset.json"
+)
+
+
 
 def test_ragas_dataset_structural_schema():
     """
@@ -38,8 +43,7 @@ def test_golden_dataset_file_loading_integrity():
     Unit Test: Verifies that golden_dataset.json exists on disk, contains valid JSON,
     and adheres strictly to the list-of-dictionaries schema structure.
     """
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    file_path = os.path.join(base_dir, config.GOLDEN_DATASET_PATH)
+    file_path = FIXTURE_DATASET_PATH
 
     # 1. Assert file exists
     assert os.path.exists(file_path), f"Expected data file missing at: {file_path}"
@@ -73,6 +77,7 @@ async def test_live_evaluation_suite_execution_path():
         patch("src.evaluation.optimizer.initialize_vectorstore"),
         patch("src.evaluation.optimizer.AgenticRAGCore") as mock_agent_class,
         patch("src.evaluation.optimizer.evaluate") as mock_ragas_evaluate,
+        patch.object(config, "GOLDEN_DATASET_PATH", FIXTURE_DATASET_PATH),
     ):
         # Create a mock instance for AgenticRAGCore
         mock_agent_instance = MagicMock()
@@ -82,6 +87,9 @@ async def test_live_evaluation_suite_execution_path():
         mock_pipeline_response = MagicMock()
         mock_pipeline_response.answer = "Mocked answer string."
         mock_pipeline_response.citations = ["Mocked citation string."]
+        mock_pipeline_response.retrieved_context = [
+            "Raw retrieved paragraph from the source PDF."
+        ]
 
         mock_agent_instance.aexecute_pipeline = AsyncMock(
             return_value=mock_pipeline_response
@@ -105,5 +113,10 @@ async def test_live_evaluation_suite_execution_path():
         try:
             scores = await run_evaluation_suite()
             assert scores is not None
+            evaluation_dataset = mock_ragas_evaluate.call_args.kwargs["dataset"]
+            assert evaluation_dataset["contexts"][0] == [
+                "Raw retrieved paragraph from the source PDF."
+            ]
+            assert "Mocked citation string." not in evaluation_dataset["contexts"][0]
         except Exception as e:
             pytest.fail(f"Live optimizer script crashed during execution loop: {e}")

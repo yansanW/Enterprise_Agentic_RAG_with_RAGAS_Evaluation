@@ -21,6 +21,7 @@ from ragas.metrics import Faithfulness, AnswerRelevancy, ContextPrecision, Conte
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
 
+from src.factory import ModelFactory
 from src.database import initialize_vectorstore
 from src.pipeline import AgenticRAGCore
 from src import config
@@ -46,19 +47,22 @@ async def run_evaluation_suite():
         test_questions = json.load(f)
 
     # Boot up pipeline engine blocks
-    vectorstore = initialize_vectorstore()
+    vectorstore = initialize_vectorstore(persist_directory=config.DATA_DIR_Vectorstore)
     agent_system = AgenticRAGCore(vectorstore=vectorstore)
 
-    # --- EXPLICIT COMPONENT WRAPPING ---
-    try:
-        ragas_llm = LangchainLLMWrapper(agent_system.llm)
-        ragas_embeddings = LangchainEmbeddingsWrapper(vectorstore.embeddings)
-    except Exception as e:
-        print(
-            f"⚠️ Model extraction warning: {e}. Falling back to default initialization layers."
-        )
-        ragas_llm = None
-        ragas_embeddings = None
+    # --- UNIFIED FACTORY INJECTION ---
+    # We explicitly request clean wrappers from our factory. This bypasses
+    # internal class introspection bugs and prevents script fracturing!
+    ragas_llm = ModelFactory.get_ragas_llm()
+    ragas_embeddings = ModelFactory.get_ragas_embeddings()
+    # try:
+    #     ragas_llm = LangchainLLMWrapper(agent_system.llm) 
+    #     ragas_embeddings = LangchainEmbeddingsWrapper(vectorstore.embeddings)
+    # except Exception as e:
+    #     print(f"⚠️ Model extraction warning: {e}. Falling back to clean Factory calls.")
+    #     # Seamless failover backup plan
+    #     ragas_llm = LangchainLLMWrapper(ModelFactory.get_llm())
+    #     ragas_embeddings = LangchainEmbeddingsWrapper(ModelFactory.get_embeddings())
 
     queries = []
     answers = []
@@ -69,7 +73,11 @@ async def run_evaluation_suite():
         f"🏃‍♂️ Executing pipeline over {len(test_questions)} dynamic evaluation queries..."
     )
 
-    for item in test_questions:
+    query_delay = float(os.getenv("EVALUATION_QUERY_DELAY_SECONDS", "6.5"))
+
+    for item_index, item in enumerate(test_questions):
+        if item_index and query_delay > 0:
+            await asyncio.sleep(query_delay)
         q = item["question"]
         queries.append(q)
         ground_truths.append(item["ground_truth"])
@@ -77,9 +85,15 @@ async def run_evaluation_suite():
         # Invoke the active async pipeline execution path
         result = await agent_system.aexecute_pipeline(query=q, chat_history=[])
         answers.append(result.answer)
-        contexts.append(
-            result.citations if result.citations else ["No verified context retrieved."]
+        raw_context = (
+            result.retrieved_context
+            if result.retrieved_context
+            else ["No verified context retrieved."]
         )
+        contexts.append(raw_context)
+        if item_index == 0:
+            print("🔎 Example raw retrieved contexts passed to RAGAS:")
+            print(json.dumps(raw_context, indent=2, ensure_ascii=False))
 
     # 3. Restructure payload matrices into a Hugging Face Dataset format
     evaluation_dict = {

@@ -11,39 +11,18 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_ollama import OllamaEmbeddings  # pip install langchain-ollama
+
+from src.factory import ModelFactory
 from src import config
 
 
 class PDFIngestionEngine:
     def __init__(self):
-        # 1. Initialize the embedding instance dynamically based on your config file
-        if config.EMBEDDING_SOURCE == "google":
-            self.embeddings = GoogleGenerativeAIEmbeddings(
-                model=config.GOOGLE_EMBEDDING, google_api_key=config.GOOGLE_API_KEY
-            )
-        elif config.EMBEDDING_SOURCE == "ollama":
-            self.embeddings = OllamaEmbeddings(
-                model=config.OLLAMA_EMBEDDING, base_url=config.OLLAMA_URL
-            )
-        else:
-            raise ValueError(f"Unknown embedding source: {config.EMBEDDING_SOURCE}")
-
-        # 2. Select the strategy pattern for text chunking
-        if config.SPLITTER_TYPE == "semantic":
-            print("🔧 Initializing Dynamic Semantic Chunker...")
-            self.splitter = SemanticChunker(
-                self.embeddings, breakpoint_threshold_type="percentile"
-            )
-        elif config.SPLITTER_TYPE == "static":
-            print(
-                f"🔧 Initializing Static Recursive Character Splitter ({config.CHUNK_SIZE} tokens)..."
-            )
-            self.splitter = RecursiveCharacterTextSplitter(
-                chunk_size=config.CHUNK_SIZE, chunk_overlap=config.CHUNK_OVERLAP
-            )
-        else:
-            raise ValueError(f"Unknown splitter type: {config.SPLITTER_TYPE}")
-
+        # The factory handles the logic dynamically!
+        self.embeddings = ModelFactory.get_embeddings()
+        self.splitter = ModelFactory.get_text_splitter(self.embeddings)
+        
+        
     def process_pdf(self, file_path: str):
         """Loads and processes documents dynamically based on layout complexity rules."""
         # 3. Strategy Pattern Routing for Parsing

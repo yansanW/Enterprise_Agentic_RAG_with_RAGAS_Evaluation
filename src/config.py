@@ -1,7 +1,6 @@
 # src/config.py
 import os
 import yaml
-import ollama
 
 from dotenv import load_dotenv
 
@@ -13,15 +12,9 @@ TEST_DOCUMENT_PATH = os.getenv("TEST_DOCUMENT_PATH")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
-OLLAMA_URL = os.getenv("OLLAMA_BASE_URL")
+OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
-# 2. Test the connection to Ollama with the provided configuration
-client = ollama.Client(host=OLLAMA_URL)
-response = client.generate(model=OLLAMA_MODEL, prompt="Hello, Llama!")
-print(response["response"])
-
-# 3. Parse the structural hyperparameters from the YAML configuration
+# 2. Parse the structural hyperparameters from the YAML configuration
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "configs", "config.yaml")
 with open(CONFIG_PATH, "r") as f:
     _yaml_config = yaml.safe_load(f)
@@ -68,10 +61,13 @@ _SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(_SRC_DIR)
 
 # 3. Explicitly define the absolute path to your data/ directory
-DATA_DIR = os.path.join(BASE_DIR, _yaml_config["vectorstore"]["data_dir"])
+DATA_DIR = os.path.join(BASE_DIR, "data")
+DATA_DIR_Vectorstore = os.path.join(DATA_DIR, _yaml_config["vectorstore"]["persist_directory"])
+DATA_DIR_Vectorstore_test = os.path.join(BASE_DIR, _yaml_config["vectorstore"]["test_document_path"])  # Ensure it's an absolute path
 
 # Ensure the data directories physically exist on the machine automatically
-os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(DATA_DIR_Vectorstore, exist_ok=True)
+print(f"✅ Data directory verified at: {DATA_DIR_Vectorstore}")
 
 golden_dataset_path = _yaml_config["evaluation"]["golden_ragas_dataset_path"]
 GOLDEN_DATASET_PATH = os.path.join(BASE_DIR, golden_dataset_path)

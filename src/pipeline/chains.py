@@ -8,28 +8,14 @@ from langchain_ollama import ChatOllama
 
 from src import config
 from src.pipeline.schemas import GuardedAnswerSchema
+from src.factory import ModelFactory
 from typing import Optional, Any
 
 
 def _get_llm_client():
     """Internal Factory helper to instantiate the exact model provider chosen in configs."""
-    if config.LLM_SOURCE == "google":
-        print(f"🤖 Initializing Cloud LLM Core: {config.GOOGLE_LLM}")
-        return ChatGoogleGenerativeAI(
-            model=config.GOOGLE_LLM,
-            google_api_key=config.GOOGLE_API_KEY,
-            temperature=config.LLM_TEMPERATURE,  # Force maximum deterministic reliability
-        )
-    elif config.LLM_SOURCE == "ollama":
-        print(f"🤖 Initializing Local Sovereign LLM Core: {config.OLLAMA_LLM}")
-        return ChatOllama(
-            model=config.OLLAMA_LLM,
-            base_url=config.OLLAMA_URL,
-            temperature=config.LLM_TEMPERATURE,  # Force maximum deterministic reliability
-        )
-    else:
-        raise ValueError(f"Unsupported LLM provider configuration: {config.LLM_SOURCE}")
-
+    return ModelFactory.get_llm()
+    
 
 class AgenticRAGCore:
     def __init__(self, vectorstore):
@@ -136,6 +122,7 @@ class AgenticRAGCore:
         # --- ASYNCHRONOUS RETRIEVAL TRACK ---
         # Pass the optimized search_query to the retriever instead of the raw user input!
         docs = await self.retriever.ainvoke(search_query)
+        retrieved_context = [doc.page_content for doc in docs]
         context_str = "\n\n".join(
             [
                 f"[Source: {doc.metadata.get('source', 'Unknown')} | Page: {doc.metadata.get('page', 'N/A')}]\n{doc.page_content}"
@@ -170,4 +157,5 @@ class AgenticRAGCore:
         structured_response = await self.structured_generator.ainvoke(
             formatted_messages
         )
+        structured_response.attach_retrieved_context(retrieved_context)
         return structured_response
